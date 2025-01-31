@@ -19,7 +19,8 @@ The `JAVA PROJECTS` view allows you to manage your dependencies. More details ca
 
 - UML(Classes) Chart: https://drive.google.com/file/d/1uBblr-9sVkOjfDOg6As256iPZaHBJjVc/view?usp=sharing
 - UML(Alt) Chart:
--classDiagram
+-
+```classDiagram
 Class01 <|-- AveryLongClass : Cool
 Class03 *-- Class04
 Class05 o-- Class06
@@ -33,7 +34,7 @@ Class01 : size()
 Class01 : int chimp
 Class01 : int gorilla
 Class08 <--> C2: Cool label
-
+```
 ## UI/UX Inspo sites
 
 - mobbin: https://mobbin.com/browse/ios/apps
