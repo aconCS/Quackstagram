@@ -17,9 +17,8 @@ The `JAVA PROJECTS` view allows you to manage your dependencies. More details ca
 
 ## Design Chart
 
-- UML(Classes) Chart: https://drive.google.com/file/d/1uBblr-9sVkOjfDOg6As256iPZaHBJjVc/view?usp=sharing
-- UML(Alt) Chart:
--
+- UML(Temporary) Chart: https://drive.google.com/file/d/1uBblr-9sVkOjfDOg6As256iPZaHBJjVc/view?usp=sharing
+- UML(Embedded) Chart:
 ```mermaid
 classDiagram
 Class01 <|-- AveryLongClass : Cool
