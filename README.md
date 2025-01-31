@@ -18,7 +18,21 @@ The `JAVA PROJECTS` view allows you to manage your dependencies. More details ca
 ## Design Chart
 
 - UML(Classes) Chart: https://drive.google.com/file/d/1uBblr-9sVkOjfDOg6As256iPZaHBJjVc/view?usp=sharing
-- UML(Alt) Chart: 
+- UML(Alt) Chart:
+-classDiagram
+Class01 <|-- AveryLongClass : Cool
+Class03 *-- Class04
+Class05 o-- Class06
+Class07 .. Class08
+Class09 --> C2 : Where am i?
+Class09 --* C3
+Class09 --|> Class07
+Class07 : equals()
+Class07 : Object[] elementData
+Class01 : size()
+Class01 : int chimp
+Class01 : int gorilla
+Class08 <--> C2: Cool label
 
 ## UI/UX Inspo sites
 
