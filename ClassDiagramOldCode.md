@@ -1,6 +1,16 @@
 ```mermaid
 classDiagram
 
+namespace JFrame{
+class SignInUI
+class SignUpUI
+class InstagramProfileUI
+class QuakstagramHomeUI
+class NotificationsUI
+class ExploreUI
+class ImageUploadUI
+}
+
 SignInUI --> "1" User : creates and uses
 SignInUI ..> "1" InstagramProfileUI : creates
 SignInUI "1" <..> "1" SignUpUI : creates
