@@ -1,0 +1,14 @@
+# Ide files
+.vscode/
+.idea/
+*.iml
+
+# Compiled Java files
+bin/
+out/
+target/  # For Maven
+build/   # For Gradle
+
+# OS-Specific
+.DS_Store
+Thumbs.db
