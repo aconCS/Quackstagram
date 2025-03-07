@@ -1,3 +1,7 @@
+package view;
+
+import model.User;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
