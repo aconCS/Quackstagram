@@ -1,4 +1,4 @@
-package view;
+package view.coreUI;
 
 import model.User;
 
@@ -24,7 +24,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class QuakstagramHomeUI extends JFrame {
+public class QuackstagramHomeUI extends JFrame {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
     private static final int NAV_ICON_SIZE = 20; // Corrected static size for bottom icons
@@ -37,7 +37,7 @@ public class QuakstagramHomeUI extends JFrame {
     private JPanel imageViewPanel;
     
 
-    public QuakstagramHomeUI() {
+    public QuackstagramHomeUI() {
         setTitle("Quakstagram Home");
         setSize(WIDTH, HEIGHT);
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
@@ -417,7 +417,7 @@ private String[][] createSampleData() {
          e.printStackTrace();
      }
       User user = new User(loggedInUsername);
-        InstagramProfileUI profileUI = new InstagramProfileUI(user);
+        UserProfileUI profileUI = new UserProfileUI(user);
         profileUI.setVisible(true);
     }
  
@@ -431,14 +431,14 @@ private String[][] createSampleData() {
     private void ImageUploadUI() {
         // Open InstagramProfileUI frame
         this.dispose();
-        ImageUploadUI upload = new ImageUploadUI();
+        PostUploadUI upload = new PostUploadUI();
         upload.setVisible(true);
     }
  
     private void openHomeUI() {
         // Open InstagramProfileUI frame
         this.dispose();
-        QuakstagramHomeUI homeUI = new QuakstagramHomeUI();
+        QuackstagramHomeUI homeUI = new QuackstagramHomeUI();
         homeUI.setVisible(true);
     }
  

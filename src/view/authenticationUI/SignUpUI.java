@@ -3,7 +3,6 @@ package view.authenticationUI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.ImageIO;
@@ -11,25 +10,22 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class SignUpUI extends JFrame {
 
-    private static final int WIDTH = 300;
-    private static final int HEIGHT = 500;
-
-    private final JTextField usernameField;
-    private final JTextField passwordField;
-    private final JTextField bioField;
-    private final String credentialsFilePath = "resources/data/credentials.txt";
-    private final String profilePhotoStoragePath = "resources/img/storage/profile/";
+    private final JTextField USERNAME_FIELD;
+    private final JTextField PASSWORD_FIELD;
+    private final JTextField BIO_FIELD;
+    private final String CREDENTIALS_FILE_PATH = "resources/data/credentials.txt";
+    private final String PROFILE_PHOTO_STORAGE_PATH = "resources/img/storage/profile/";
 
 
     public SignUpUI() {
-        usernameField = new JTextField();
-        passwordField = new JPasswordField();
-        bioField = new JTextField();
+        USERNAME_FIELD = new JTextField();
+        PASSWORD_FIELD = new JPasswordField();
+        BIO_FIELD = new JTextField();
 
         new AuthUIBuilder(this, "Quackstagram - Register")
-                .addTextFieldPanel("Username", usernameField)
-                .addTextFieldPanel("Password", passwordField)
-                .addTextFieldPanel("Bio", bioField)
+                .addTextFieldPanel("Username", USERNAME_FIELD)
+                .addTextFieldPanel("Password", PASSWORD_FIELD)
+                .addTextFieldPanel("Bio", BIO_FIELD)
                 .addButton("Upload Profile Picture", Color.RED, this::onPictureUploadClicked)
                 .addButton("Register", Color.BLUE, this::onRegisterClicked)
                 .addButton("Login instead", Color.WHITE, this::switchButtonClicked)
@@ -37,9 +33,9 @@ public class SignUpUI extends JFrame {
     }
 
     private void onRegisterClicked(ActionEvent event) {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        String bio = bioField.getText();
+        String username = USERNAME_FIELD.getText();
+        String password = PASSWORD_FIELD.getText();
+        String bio = BIO_FIELD.getText();
 
         if (doesUsernameExist(username)) {
             JOptionPane.showMessageDialog(this, "Username already exists. Please choose a different username.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -57,7 +53,7 @@ public class SignUpUI extends JFrame {
     }
     
     private boolean doesUsernameExist(String username) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(credentialsFilePath))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(CREDENTIALS_FILE_PATH))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith(username + ":")) {
@@ -81,14 +77,14 @@ public class SignUpUI extends JFrame {
         fileChooser.setFileFilter(filter);
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            saveProfilePicture(selectedFile, usernameField.getText());
+            saveProfilePicture(selectedFile, USERNAME_FIELD.getText());
         }
     }
 
     private void saveProfilePicture(File file, String username) {
         try {
             BufferedImage image = ImageIO.read(file);
-            File outputFile = new File(profilePhotoStoragePath + username + ".png");
+            File outputFile = new File(PROFILE_PHOTO_STORAGE_PATH + username + ".png");
             ImageIO.write(image, "png", outputFile);
         } catch (IOException e) {
             e.printStackTrace();

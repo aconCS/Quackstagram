@@ -1,4 +1,4 @@
-package view;
+package view.coreUI;
 
 import model.User;
 
@@ -11,13 +11,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.awt.*;
 import java.nio.file.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class InstagramProfileUI extends JFrame {
+public class UserProfileUI extends JFrame {
 
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
@@ -29,7 +25,7 @@ public class InstagramProfileUI extends JFrame {
     private JPanel navigationPanel; // Panel for the navigation
     private User currentUser; // User object to store the current user's information
 
-    public InstagramProfileUI(User user) {
+    public UserProfileUI(User user) {
         this.currentUser = user;
         // Initialize counts
         int imageCount = 0;
@@ -110,7 +106,7 @@ public class InstagramProfileUI extends JFrame {
         initializeUI();
     }
 
-    public InstagramProfileUI() {
+    public UserProfileUI() {
 
         setTitle("DACS Profile");
         setSize(WIDTH, HEIGHT);
@@ -121,6 +117,13 @@ public class InstagramProfileUI extends JFrame {
         headerPanel = createHeaderPanel(); // Initialize header panel
         navigationPanel = createNavigationPanel(); // Initialize navigation panel
         initializeUI();
+    }
+
+    public void openProfileUI() {
+        // Open InstagramProfileUI frame
+        this.dispose();
+        UserProfileUI profileUI = new UserProfileUI();
+        profileUI.setVisible(true);
     }
 
     private void initializeUI() {
@@ -393,6 +396,7 @@ public class InstagramProfileUI extends JFrame {
         return label;
     }
 
+
     private JButton createIconButton(String iconPath, String buttonType) {
         ImageIcon iconOriginal = new ImageIcon(iconPath);
         Image iconScaled = iconOriginal.getImage().getScaledInstance(NAV_ICON_SIZE, NAV_ICON_SIZE, Image.SCALE_SMOOTH);
@@ -414,41 +418,6 @@ public class InstagramProfileUI extends JFrame {
         }
         return button;
 
-    }
-
-    private void ImageUploadUI() {
-        // Open InstagramProfileUI frame
-        this.dispose();
-        ImageUploadUI upload = new ImageUploadUI();
-        upload.setVisible(true);
-    }
-
-    private void openProfileUI() {
-        // Open InstagramProfileUI frame
-        this.dispose();
-        InstagramProfileUI profileUI = new InstagramProfileUI();
-        profileUI.setVisible(true);
-    }
-
-    private void notificationsUI() {
-        // Open InstagramProfileUI frame
-        this.dispose();
-        NotificationsUI notificationsUI = new NotificationsUI();
-        notificationsUI.setVisible(true);
-    }
-
-    private void openHomeUI() {
-        // Open InstagramProfileUI frame
-        this.dispose();
-        QuakstagramHomeUI homeUI = new QuakstagramHomeUI();
-        homeUI.setVisible(true);
-    }
-
-    private void exploreUI() {
-        // Open InstagramProfileUI frame
-        this.dispose();
-        ExploreUI explore = new ExploreUI();
-        explore.setVisible(true);
     }
 
 }

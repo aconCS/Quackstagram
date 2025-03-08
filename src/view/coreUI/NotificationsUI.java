@@ -1,4 +1,4 @@
-package view;
+package view.coreUI;
 
 import model.User;
 
@@ -166,7 +166,7 @@ private String getElapsedTime(String timestamp) {
     private void ImageUploadUI() {
         // Open InstagramProfileUI frame
         this.dispose();
-        ImageUploadUI upload = new ImageUploadUI();
+        PostUploadUI upload = new PostUploadUI();
         upload.setVisible(true);
     }
 
@@ -186,7 +186,7 @@ private String getElapsedTime(String timestamp) {
         e.printStackTrace();
     }
      User user = new User(loggedInUsername);
-       InstagramProfileUI profileUI = new InstagramProfileUI(user);
+       UserProfileUI profileUI = new UserProfileUI(user);
        profileUI.setVisible(true);
    }
  
@@ -200,7 +200,7 @@ private String getElapsedTime(String timestamp) {
     private void openHomeUI() {
         // Open InstagramProfileUI frame
         this.dispose();
-        QuakstagramHomeUI homeUI = new QuakstagramHomeUI();
+        QuackstagramHomeUI homeUI = new QuackstagramHomeUI();
         homeUI.setVisible(true);
     }
 

@@ -1,4 +1,4 @@
-package view;
+package view.coreUI;
 
 import model.User;
 
@@ -14,7 +14,7 @@ import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class ImageUploadUI extends JFrame {
+public class PostUploadUI extends JFrame {
 
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
@@ -25,7 +25,7 @@ public class ImageUploadUI extends JFrame {
     private JButton saveButton;
     private boolean imageUploaded = false;
 
-    public ImageUploadUI() {
+    public PostUploadUI() {
         setTitle("Upload Image");
         setSize(WIDTH, HEIGHT);
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
@@ -282,7 +282,7 @@ public class ImageUploadUI extends JFrame {
          e.printStackTrace();
      }
       User user = new User(loggedInUsername);
-        InstagramProfileUI profileUI = new InstagramProfileUI(user);
+        UserProfileUI profileUI = new UserProfileUI(user);
         profileUI.setVisible(true);
     }
  
@@ -296,7 +296,7 @@ public class ImageUploadUI extends JFrame {
     private void openHomeUI() {
         // Open InstagramProfileUI frame
         this.dispose();
-        QuakstagramHomeUI homeUI = new QuakstagramHomeUI();
+        QuackstagramHomeUI homeUI = new QuackstagramHomeUI();
         homeUI.setVisible(true);
     }
  

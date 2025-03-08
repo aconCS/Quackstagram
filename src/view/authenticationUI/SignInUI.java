@@ -1,7 +1,7 @@
 package view.authenticationUI;
 
 import model.User;
-import view.InstagramProfileUI;
+import view.coreUI.UserProfileUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,27 +15,27 @@ import java.io.IOException;
 
 public class SignInUI extends JFrame {
 
-    private final JTextField usernameField;
-    private final JTextField passwordField;
+    private final JTextField USERNAME_FIELD;
+    private final JTextField PASSWORD_FIELD;
     private User newUser;
     
 
     public SignInUI() {
         // Create fields to pass to AuthUIBuilder
-        usernameField = new JTextField();
-        passwordField = new JPasswordField();
+        USERNAME_FIELD = new JTextField();
+        PASSWORD_FIELD = new JPasswordField();
 
          new AuthUIBuilder(this,"Quackstagram - Sign in")
-                .addTextFieldPanel("Username", usernameField)
-                .addTextFieldPanel("Password", passwordField)
+                .addTextFieldPanel("Username", USERNAME_FIELD)
+                .addTextFieldPanel("Password", PASSWORD_FIELD)
                 .addButton("Sign in", Color.RED, this::onSignInClicked)
                 .addButton("Create account", Color.BLUE, this::onRegisterNowClicked)
                 .buildUI();
     }
 
     private void onSignInClicked(ActionEvent event) {
-        String enteredUsername = usernameField.getText();
-        String enteredPassword = passwordField.getText();
+        String enteredUsername = USERNAME_FIELD.getText();
+        String enteredPassword = PASSWORD_FIELD.getText();
         System.out.println(enteredUsername+" <-> "+enteredPassword);
         if (verifyCredentials(enteredUsername, enteredPassword)) {
             System.out.println("It worked");
@@ -44,7 +44,7 @@ public class SignInUI extends JFrame {
 
             // Open the SignInUI frame
             SwingUtilities.invokeLater(() -> {
-                InstagramProfileUI profileUI = new InstagramProfileUI(newUser);
+                UserProfileUI profileUI = new UserProfileUI(newUser);
                 profileUI.setVisible(true);
             });
         } else {

@@ -10,34 +10,34 @@ public class AuthUIBuilder{
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
 
-    private final JFrame frame;
-    private final ArrayList<JButton> buttons;
-    private final ArrayList<JPanel> fieldPanels;
+    private final JFrame FRAME;
+    private final ArrayList<JButton> BUTTONS;
+    private final ArrayList<JPanel> FIELD_PANELS;
 
     public AuthUIBuilder(JFrame frame, String title){
-        this.frame = frame;
-        frame.setTitle(title);
-        frame.setResizable(false);
-        frame.setSize(WIDTH, HEIGHT);
-        frame.setLocationRelativeTo(null);
-        frame.setMinimumSize(new Dimension(WIDTH, HEIGHT));
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
+        this.FRAME = frame;
+        FRAME.setTitle(title);
+        FRAME.setResizable(false);
+        FRAME.setSize(WIDTH, HEIGHT);
+        FRAME.setLocationRelativeTo(null);
+        FRAME.setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        FRAME.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        FRAME.setLayout(new BorderLayout());
 
-        buttons = new ArrayList<>();
-        fieldPanels = new ArrayList<>();
+        BUTTONS = new ArrayList<>();
+        FIELD_PANELS = new ArrayList<>();
     }
 
     public AuthUIBuilder addTextFieldPanel(String label, JTextField textField){
         JPanel panel = ComponentFactory.createFieldPanel(label, textField);
-        fieldPanels.add(panel);
+        FIELD_PANELS.add(panel);
         return this;
     }
 
     public AuthUIBuilder addButton(String label, Color color, ActionListener action){
         JButton button = ComponentFactory.createButton(label, color);
         button.addActionListener(action);
-        buttons.add(button);
+        BUTTONS.add(button);
         return this;
     }
 
@@ -45,7 +45,7 @@ public class AuthUIBuilder{
         // Create headerPanel
         JPanel headerPanel = ComponentFactory.createHeader(WIDTH);
 
-        // Create bodyPanel to hold logo and fieldPanels
+        // Create bodyPanel to hold logo and FIELD_PANELS
         JPanel bodyPanel = new JPanel();
         bodyPanel.setLayout(new BoxLayout(bodyPanel, BoxLayout.Y_AXIS));
 
@@ -58,19 +58,19 @@ public class AuthUIBuilder{
         bodyPanel.add(logoPanel);
 
         // Add fields to bodyPanel
-        for(JPanel fieldPanel : fieldPanels){
+        for(JPanel fieldPanel : FIELD_PANELS){
             bodyPanel.add(fieldPanel);
         }
 
         // Add buttons to buttonPanel
-        for(JButton button : buttons){
+        for(JButton button : BUTTONS){
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
             buttonPanel.add(button);
         }
 
         // Add panels to the root frame
-        frame.add(headerPanel, BorderLayout.NORTH);
-        frame.add(bodyPanel, BorderLayout.CENTER);
-        frame.add(buttonPanel, BorderLayout.SOUTH);
+        FRAME.add(headerPanel, BorderLayout.NORTH);
+        FRAME.add(bodyPanel, BorderLayout.CENTER);
+        FRAME.add(buttonPanel, BorderLayout.SOUTH);
     }
 }

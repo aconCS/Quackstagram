@@ -1,4 +1,4 @@
-package view;
+package view.coreUI;
 
 import model.User;
 
@@ -17,8 +17,6 @@ import java.nio.file.Paths;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ExploreUI extends JFrame {
@@ -237,7 +235,7 @@ topPanel.add(timeLabel, BorderLayout.EAST);
 
  usernameLabel.addActionListener(e -> {
     User user = new User(finalUsername); // Assuming User class has a constructor that takes a username
-    InstagramProfileUI profileUI = new InstagramProfileUI(user);
+    UserProfileUI profileUI = new UserProfileUI(user);
     profileUI.setVisible(true);
     dispose(); // Close the current frame
 });
@@ -287,7 +285,7 @@ private JButton createIconButton(String iconPath, String buttonType) {
 private void ImageUploadUI() {
     // Open InstagramProfileUI frame
     this.dispose();
-    ImageUploadUI upload = new ImageUploadUI();
+    PostUploadUI upload = new PostUploadUI();
     upload.setVisible(true);
 }
    private void openProfileUI() {
@@ -305,7 +303,7 @@ private void ImageUploadUI() {
         e.printStackTrace();
     }
      User user = new User(loggedInUsername);
-       InstagramProfileUI profileUI = new InstagramProfileUI(user);
+       UserProfileUI profileUI = new UserProfileUI(user);
        profileUI.setVisible(true);
    }
 
@@ -319,7 +317,7 @@ private void ImageUploadUI() {
    private void openHomeUI() {
        // Open InstagramProfileUI frame
        this.dispose();
-       QuakstagramHomeUI homeUI = new QuakstagramHomeUI();
+       QuackstagramHomeUI homeUI = new QuackstagramHomeUI();
        homeUI.setVisible(true);
    }
 
