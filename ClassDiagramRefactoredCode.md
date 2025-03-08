@@ -50,4 +50,11 @@ class AuthUIBuilder{
 +buildUI()
 }
 
+class ComponentFactory{
+~createHeader(int WIDTH) JPanel$
+~createButton(String text, Color color) JButton$
+~createFieldPanel(String label, JTextField textField)$
+~createLogoPanel() JPanel$
+}
+
 ```
