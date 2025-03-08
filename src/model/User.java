@@ -18,6 +18,7 @@ public class User {
         this.bio = bio;
         this.password = password;
         this.pictures = new ArrayList<>();
+
         // Initialize counts to 0
         this.postsCount = 0;
         this.followersCount = 0;
@@ -45,11 +46,12 @@ public class User {
 
     // Setter methods for followers and following counts
     public void setFollowersCount(int followersCount) { this.followersCount = followersCount; }
-   public void setFollowingCount(int followingCount) { this.followingCount = followingCount; }
-   public void setPostCount(int postCount) { this.postsCount = postCount;}
+    public void setFollowingCount(int followingCount) { this.followingCount = followingCount; }
+    public void setPostCount(int postCount) { this.postsCount = postCount;}
+
     // Implement the toString method for saving user information
-@Override
-public String toString() {
+    @Override
+    public String toString() {
     return username + ":" + bio + ":" + password; // Format as needed
 }
 
