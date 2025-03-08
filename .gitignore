@@ -6,8 +6,8 @@
 # Compiled Java files
 bin/
 out/
-target/  # For Maven
-build/   # For Gradle
+target/
+build/
 
 # OS-Specific
 .DS_Store

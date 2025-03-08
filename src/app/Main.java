@@ -1,10 +1,12 @@
 package app;
 
-import view.SignInUI;
+import view.authenticationUI.SignInUI;
+
+import javax.swing.*;
 
 class Main {
     public static void main(String[] args) {
-        SignInUI frame = new SignInUI();
+        JFrame frame = new SignInUI();
         frame.setVisible(true);
     }
 }
