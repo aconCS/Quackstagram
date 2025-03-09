@@ -6,9 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ComponentFactory {
-    static JPanel createHeader(){
-        return new HeaderPanel();
-    }
 
     static JButton createButton(String text){
         JButton button = new JButton(text);
@@ -23,10 +20,12 @@ public class ComponentFactory {
 
         // Create fieldLabel and style
         JLabel fieldLabel = new JLabel(label);
+        fieldLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         fieldLabel.setFont(new Font("Arial", Font.BOLD, 14));
 
         // Style textField
         textField.setPreferredSize(new Dimension(200, 30));
+        textField.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         panel.add(fieldLabel);
         panel.add(textField);

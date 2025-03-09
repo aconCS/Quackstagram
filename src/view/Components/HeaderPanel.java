@@ -10,13 +10,15 @@ public class HeaderPanel extends JPanel {
     }
 
     private void buildHeaderPanel() {
-        setLayout(new FlowLayout(FlowLayout.CENTER));
+        setLayout(new BorderLayout());
         setBackground(new Color(51, 51, 51)); // Set a darker background for the header
+        setPreferredSize(new Dimension(WIDTH, 40)); // Give the header a fixed height
+
         JLabel lblRegister = new JLabel("Quackstagram");
         lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
-        lblRegister.setForeground(Color.WHITE); // Set the text color to white
-        add(lblRegister);
-        setPreferredSize(new Dimension(WIDTH, 40)); // Give the header a fixed height
+        lblRegister.setForeground(Color.WHITE);
+        lblRegister.setHorizontalAlignment(SwingConstants.CENTER);
+        add(lblRegister, BorderLayout.CENTER);
     }
 
 }

@@ -1,5 +1,7 @@
 package services;
 
+import model.User;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -16,6 +18,8 @@ public class AuthServices {
                 String[] credentials = line.split(":");
                 if (credentials[0].equals(username) && credentials[1].equals(password)) {
                     String bio = credentials[2];
+                    User newUser = new User(username, bio, password); // Assuming User constructor takes these parameters
+                    saveUserInformation(newUser);
                     return true;
                 }
             }
@@ -23,6 +27,14 @@ public class AuthServices {
             e.printStackTrace();
         }
         return false;
+    }
+
+    private void saveUserInformation(User user) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/data/users.txt", false))) {
+            writer.write(user.toString());  // Implement a suitable toString method in User class
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean doesUsernameExist(String username) {

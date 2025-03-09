@@ -1,5 +1,7 @@
 package view.authenticationUI;
 
+import view.Components.HeaderPanel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -7,8 +9,6 @@ import java.util.ArrayList;
 
 
 public class AuthUIBuilder{
-    private static final int WIDTH = 300;
-    private static final int HEIGHT = 500;
 
     private final JFrame frame;
     private final ArrayList<JButton> buttons;
@@ -36,7 +36,7 @@ public class AuthUIBuilder{
 
     public void buildUI() {
         // Create headerPanel
-        JPanel headerPanel = ComponentFactory.createHeader();
+        JPanel headerPanel = new HeaderPanel();
 
         // Create bodyPanel to hold logo and fieldPanels
         JPanel bodyPanel = new JPanel(new GridBagLayout());
