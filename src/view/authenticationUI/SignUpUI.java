@@ -2,12 +2,12 @@ package view.authenticationUI;
 
 import controller.AuthController;
 import controller.NavigationController;
+import view.Components.UIBase;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class SignUpUI extends JFrame {
+public class SignUpUI extends UIBase {
 
     private final AuthController authController;
     private final JTextField usernameField;
@@ -16,17 +16,18 @@ public class SignUpUI extends JFrame {
 
 
     public SignUpUI() {
+        setTitle( "Quackstagram - Register");
         authController = new AuthController();
         usernameField = new JTextField();
         passwordField = new JPasswordField();
         bioField = new JTextField();
 
-        new AuthUIBuilder(this, "Quackstagram - Register")
+        new AuthUIBuilder(this)
                 .addTextFieldPanel("Username", usernameField)
                 .addTextFieldPanel("Password", passwordField)
                 .addTextFieldPanel("Bio", bioField)
-                .addButton("Register", Color.BLUE, this::onRegisterClicked)
-                .addButton("Login instead", Color.WHITE, this::switchButtonClicked)
+                .addButton("Register", this::onRegisterClicked)
+                .addButton("Login instead", this::switchButtonClicked)
                 .buildUI();
     }
 

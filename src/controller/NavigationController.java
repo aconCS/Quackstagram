@@ -22,7 +22,4 @@ public class NavigationController {
         SwingUtilities.invokeLater(() -> nextFrame.setVisible(true));
     }
 
-    public void navigateProfile(JFrame currentFrame) {
-
-    }
 }

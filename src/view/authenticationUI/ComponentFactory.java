@@ -1,30 +1,19 @@
 package view.authenticationUI;
 
+import view.Components.HeaderPanel;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class ComponentFactory {
-    static JPanel createHeader(int WIDTH){
-        // Header with the Register label
-        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        headerPanel.setBackground(new Color(51, 51, 51)); // Set a darker background for the header
-        JLabel headerLabel = new JLabel("Quackstagram");
-        headerLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        headerLabel.setForeground(Color.WHITE); // Set the text color to white
-        headerLabel.setAlignmentY(Component.CENTER_ALIGNMENT);
-        headerPanel.add(headerLabel);
-        headerPanel.setPreferredSize(new Dimension(WIDTH, 50)); // Give the header a fixed height
-
-        return headerPanel;
+    static JPanel createHeader(){
+        return new HeaderPanel();
     }
 
-    static JButton createButton(String text, Color color){
+    static JButton createButton(String text){
         JButton button = new JButton(text);
-        button.setBackground(color); // Use a red color that matches the mockup
-        button.setForeground(Color.BLACK); // Set the text color to black
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
         button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
         return button;
     }
 
@@ -35,6 +24,9 @@ public class ComponentFactory {
         // Create fieldLabel and style
         JLabel fieldLabel = new JLabel(label);
         fieldLabel.setFont(new Font("Arial", Font.BOLD, 14));
+
+        // Style textField
+        textField.setPreferredSize(new Dimension(200, 30));
 
         panel.add(fieldLabel);
         panel.add(textField);

@@ -1,16 +1,13 @@
 package services;
 
-import model.User;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
-public class UserServices {
+public class AuthServices {
 
-    private final String credentialsFilePath = "resources/data/credentials.txt";
-    private final String profilePhotoStoragePath = "resources/img/storage/profile/";
-    private User currentUser;
+    private static final String credentialsFilePath = "resources/data/credentials.txt";
+    private static final String profilePhotoStoragePath = "resources/img/storage/profile/";
 
     public boolean verifyCredentials(String username, String password) {
         try (BufferedReader reader = new BufferedReader(new FileReader(credentialsFilePath))) {
@@ -19,7 +16,6 @@ public class UserServices {
                 String[] credentials = line.split(":");
                 if (credentials[0].equals(username) && credentials[1].equals(password)) {
                     String bio = credentials[2];
-                    currentUser = new User(username, password, bio);
                     return true;
                 }
             }

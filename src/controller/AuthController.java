@@ -1,29 +1,28 @@
 package controller;
 
-import model.User;
-import services.UserServices;
+import services.AuthServices;
 
 public class AuthController {
 
-    private final UserServices userServices;
+    private final AuthServices authServices;
 
     public AuthController() {
-        this.userServices = new UserServices();
+        this.authServices = new AuthServices();
     }
 
     public boolean verifyCredentials(String username, String password) {
-        return userServices.verifyCredentials(username, password);
+        return authServices.verifyCredentials(username, password);
     }
 
     public boolean doesUsernameExist(String username) {
-        return userServices.doesUsernameExist(username);
+        return authServices.doesUsernameExist(username);
     }
 
     public void saveCredentials(String username, String password, String bio) {
-        userServices.saveCredentials(username, password, bio);
+        authServices.saveCredentials(username, password, bio);
     }
 
     public void uploadProfilePicture(String username) {
-        userServices.uploadProfilePicture(username);
+        authServices.uploadProfilePicture(username);
     }
 }
