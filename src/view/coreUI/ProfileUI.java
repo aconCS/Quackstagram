@@ -99,6 +99,7 @@ public class ProfileUI extends UIBase {
         // TODO EXTRACT LOGIC TO loadBioData in UserServices
         // TODO EXTRACT DATA HANDLING TO readBioData in UserRepository
         String bio = "";
+
         Path bioDetailsFilePath = Paths.get("resources/data", "credentials.txt");
         try (BufferedReader bioDetailsReader = Files.newBufferedReader(bioDetailsFilePath)) {
             String line;
