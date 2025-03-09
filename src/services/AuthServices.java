@@ -11,6 +11,7 @@ public class AuthServices {
     private static final String credentialsFilePath = "resources/data/credentials.txt";
     private static final String profilePhotoStoragePath = "resources/img/storage/profile/";
 
+    // VERIFY CREDENTIALS
     public boolean verifyCredentials(String username, String password) {
         try (BufferedReader reader = new BufferedReader(new FileReader(credentialsFilePath))) {
             String line;
@@ -29,6 +30,7 @@ public class AuthServices {
         return false;
     }
 
+    // TODO RENAME TO SAVE LOGGED IN USER
     private void saveUserInformation(User user) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/data/users.txt", false))) {
             writer.write(user.toString());  // Implement a suitable toString method in User class

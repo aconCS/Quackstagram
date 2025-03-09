@@ -55,6 +55,8 @@ public class ProfileUI extends UIBase {
         int followersCount = 0;
         int followingCount = 0;
 
+        // TODO EXTRACT LOGIC TO loadPostData in UserServices
+        // TODO EXTRACT DATA HANDLING TO readPostData in UserRepository
         // Step 1: Read image_details.txt to count the number of images posted by the user
         Path imageDetailsFilePath = Paths.get("resources/img", "image_details.txt");
         try (BufferedReader imageDetailsReader = Files.newBufferedReader(imageDetailsFilePath)) {
@@ -68,7 +70,9 @@ public class ProfileUI extends UIBase {
             e.printStackTrace();
         }
 
-        // Step 2: Read following.txt to calculate followers and following
+        // TODO EXTRACT LOGIC TO loadFollowData in UserServices
+        // TODO EXTRACT DATA HANDLING TO readFollowData in UserRepository
+        // Step 2: Read following.txt to calculate followers and following count
         Path followingFilePath = Paths.get("resources/data", "following.txt");
         try (BufferedReader followingReader = Files.newBufferedReader(followingFilePath)) {
             String line;
@@ -92,8 +96,9 @@ public class ProfileUI extends UIBase {
             e.printStackTrace();
         }
 
+        // TODO EXTRACT LOGIC TO loadBioData in UserServices
+        // TODO EXTRACT DATA HANDLING TO readBioData in UserRepository
         String bio = "";
-
         Path bioDetailsFilePath = Paths.get("resources/data", "credentials.txt");
         try (BufferedReader bioDetailsReader = Files.newBufferedReader(bioDetailsFilePath)) {
             String line;
@@ -108,14 +113,16 @@ public class ProfileUI extends UIBase {
             e.printStackTrace();
         }
 
+        // TODO KEEP IN initializeUserData for debugging
         System.out.println("Bio for " + currentUser.getUsername() + ": " + bio);
         currentUser.setBio(bio);
 
+        // Set the values in the User object
         currentUser.setFollowersCount(followersCount);
         currentUser.setFollowingCount(followingCount);
         currentUser.setPostCount(imageCount);
 
-        System.out.println(currentUser.getPostsCount());
+        System.out.println("User posts: " + currentUser.getPostsCount());
     }
 
     private void initializeUI() {
@@ -136,6 +143,8 @@ public class ProfileUI extends UIBase {
         boolean isCurrentUser = false;
         String loggedInUsername = "";
 
+        // TODO EXTRACT LOGIC TO getLoggedInUsername IN UserServices
+        // TODO EXTRACT DATA HANDLING TO readLoggedInUser IN UserRepository
         // Read the logged-in user's username from users.txt
         try (BufferedReader reader = Files.newBufferedReader(Paths.get("resources/data", "users.txt"))) {
             String line = reader.readLine();
@@ -146,15 +155,14 @@ public class ProfileUI extends UIBase {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // Header Panel
-        JPanel headerPanel = new JPanel();
         try (Stream < String > lines = Files.lines(Paths.get("resources/data", "users.txt"))) {
             isCurrentUser = lines.anyMatch(line -> line.startsWith(currentUser.getUsername() + ":"));
         } catch (IOException e) {
             e.printStackTrace(); // Log or handle the exception as appropriate
         }
 
+        // Header Panel
+        JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
         headerPanel.setBackground(Color.GRAY);
 

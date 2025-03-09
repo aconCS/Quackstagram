@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.ArrayList;
 
 // Represents a picture on Quackstagram
-public class Picture {
+public class Post {
     private String imagePath;
     private String caption;
     private int likesCount;
     private List<String> comments;
 
-    public Picture(String imagePath, String caption) {
+    public Post(String imagePath, String caption) {
         this.imagePath = imagePath;
         this.caption = caption;
         this.likesCount = 0;

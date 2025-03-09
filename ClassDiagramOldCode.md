@@ -204,7 +204,7 @@ class User{
 -List<Picture> pictures
 +User(String username, String bio, String password)
 +User(String username)
-+addPicture(Picture picture)
++addPicture(Picture post)
 +getUsername() String
 +getBio() String
 +setBio(String bio)
