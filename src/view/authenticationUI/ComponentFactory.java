@@ -7,6 +7,9 @@ import java.awt.*;
 
 public class ComponentFactory {
 
+    /*
+    * Creates a button with the given text.
+    * */
     static JButton createButton(String text){
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.BOLD, 14));
@@ -14,6 +17,9 @@ public class ComponentFactory {
         return button;
     }
 
+    /*
+    * Creates a field panel with the given label and textField.
+    * */
     static JPanel createFieldPanel(String label, JTextField textField){
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -33,6 +39,9 @@ public class ComponentFactory {
         return panel;
     }
 
+    /*
+    * Creates a logo panel with the DACS logo.
+    * */
     static JPanel createLogoPanel(){
         JLabel lblPhoto = new JLabel();
 

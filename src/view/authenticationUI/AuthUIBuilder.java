@@ -21,12 +21,18 @@ public class AuthUIBuilder{
         fieldPanels = new ArrayList<>();
     }
 
+    /*
+    * Adds a panel created by the ComponentFactory using the given label and textField to the fieldPanels list.
+    * */
     public AuthUIBuilder addTextFieldPanel(String label, JTextField textField){
         JPanel panel = ComponentFactory.createFieldPanel(label, textField);
         fieldPanels.add(panel);
         return this;
     }
 
+    /*
+    * Adds a button created by the ComponentFactory using the given label and actionListener to the buttons list.
+    * */
     public AuthUIBuilder addButton(String label, ActionListener action){
         JButton button = ComponentFactory.createButton(label);
         button.addActionListener(action);
@@ -34,9 +40,12 @@ public class AuthUIBuilder{
         return this;
     }
 
+    /*
+    * Builds the general UI structure for the authentication screens (shared by SignInUI and SignUpUI).
+    * */
     public void buildUI() {
         // Create headerPanel
-        JPanel headerPanel = new HeaderPanel();
+        JPanel headerPanel = new HeaderPanel("Quackstagram - Login");
 
         // Create bodyPanel to hold logo and fieldPanels
         JPanel bodyPanel = new JPanel(new GridBagLayout());

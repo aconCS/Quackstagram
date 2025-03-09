@@ -22,6 +22,10 @@ public class NavigationPanel extends JPanel {
         buildNavigationPanel();
     }
 
+    /*
+     * Builds the navigation bar that every UI frame will have at the bottom
+     * of the window by calling createIconButton for each icon.
+     * */
     public void buildNavigationPanel() {
         setBackground(new Color(249, 249, 249));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -38,6 +42,10 @@ public class NavigationPanel extends JPanel {
         add(createIconButton("resources/img/icons/profile.png", "profile"));
     }
 
+    /*
+    * Creates a JButton with an icon that has an actionListener based on the button type
+    * which navigates to the corresponding UI frame.
+    * */
     private JButton createIconButton(String iconPath, String buttonType) {
         ImageIcon iconOriginal = new ImageIcon(iconPath);
         Image iconScaled = iconOriginal.getImage().getScaledInstance(NAV_ICON_SIZE, NAV_ICON_SIZE, Image.SCALE_SMOOTH);
@@ -61,6 +69,9 @@ public class NavigationPanel extends JPanel {
 
     }
 
+    /*
+    * Reads the logged-in user's username from users.txt and navigates to the profile UI.
+    * */
     private void openProfileUI() {
         String loggedInUsername = "";
 
@@ -77,7 +88,7 @@ public class NavigationPanel extends JPanel {
         }
         User user = new User(loggedInUsername);
         // Navigate to profile UI
-        NavigationController.getInstance().navigate(currFrame, new ProfileUI(user));
+        NavigationController.getInstance().navigate(currFrame, new ProfileUI(user.getUsername(), user));
     }
 
     private void openImageUploadUI() { NavigationController.getInstance().navigate(currFrame, new ImageUploadUI()); }

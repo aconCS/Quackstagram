@@ -56,7 +56,7 @@ public class HomeUI extends UIBase {
         add(cardPanel, BorderLayout.CENTER);
         cardLayout.show(cardPanel, "Home"); // Start with the home view
 
-        add(new HeaderPanel(), BorderLayout.NORTH);
+        add(new HeaderPanel("Home"), BorderLayout.NORTH);
 
         add(new NavigationPanel(this), BorderLayout.SOUTH);
     }

@@ -23,7 +23,7 @@ public class ImageUploadUI extends UIBase {
 
     private static final int NAV_ICON_SIZE = 20; // Size for navigation icons
     private JLabel imagePreviewLabel;
-    private JTextArea bioTextArea;
+    private JTextArea captionTextArea;
     private JButton uploadButton;
     private JButton saveButton;
     private boolean imageUploaded = false;
@@ -34,7 +34,7 @@ public class ImageUploadUI extends UIBase {
     }
 
     private void initializeUI() {
-        JPanel headerPanel = new HeaderPanel();
+        JPanel headerPanel = new HeaderPanel("Upload Image");
         JPanel navigationPanel = new NavigationPanel(this);
 
         // Main content panel
@@ -52,14 +52,14 @@ public class ImageUploadUI extends UIBase {
 
         contentPanel.add(imagePreviewLabel);
 
-        // Bio text area
-        bioTextArea = new JTextArea("Enter a caption");
-        bioTextArea.setAlignmentX(Component.CENTER_ALIGNMENT);
-        bioTextArea.setLineWrap(true);
-        bioTextArea.setWrapStyleWord(true);
-        JScrollPane bioScrollPane = new JScrollPane(bioTextArea);
-        bioScrollPane.setPreferredSize(new Dimension(WIDTH - 50, HEIGHT / 6));
-        contentPanel.add(bioScrollPane);
+        // Caption text area
+        captionTextArea = new JTextArea("Enter a caption");
+        captionTextArea.setAlignmentX(Component.CENTER_ALIGNMENT);
+        captionTextArea.setLineWrap(true);
+        captionTextArea.setWrapStyleWord(true);
+        JScrollPane captionScrollPane = new JScrollPane(captionTextArea);
+        captionScrollPane.setPreferredSize(new Dimension(WIDTH - 50, HEIGHT / 6));
+        contentPanel.add(captionScrollPane);
 
         // Upload button
         uploadButton = new JButton("Upload Image");
@@ -67,10 +67,10 @@ public class ImageUploadUI extends UIBase {
         uploadButton.addActionListener(this::uploadAction);
         contentPanel.add(uploadButton);
 
-        // Save button (for bio)
+        // Save button (for caption)
         saveButton = new JButton("Save Caption");
         saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        saveButton.addActionListener(this::saveBioAction);
+        saveButton.addActionListener(this::saveCaptionAction);
 
         // Add panels to frame
         add(headerPanel, BorderLayout.NORTH);
@@ -97,8 +97,8 @@ public class ImageUploadUI extends UIBase {
                 Path destPath = Paths.get("resources/img", "uploaded", newFileName);
                 Files.copy(selectedFile.toPath(), destPath, StandardCopyOption.REPLACE_EXISTING);
 
-                // Save the bio and image ID to a text file
-                saveImageInfo(username + "_" + imageId, username, bioTextArea.getText());
+                // Save the caption and image ID to a text file
+                saveImageInfo(username + "_" + imageId, username, captionTextArea.getText());
 
                 // Load the image from the saved path
                 ImageIcon imageIcon = new ImageIcon(destPath.toString());
@@ -164,7 +164,7 @@ public class ImageUploadUI extends UIBase {
         return maxId + 1; // Return the next available ID
     }
 
-    private void saveImageInfo(String imageId, String username, String bio) throws IOException {
+    private void saveImageInfo(String imageId, String username, String caption) throws IOException {
         Path infoFilePath = Paths.get("resources/img", "image_details.txt");
         if (!Files.exists(infoFilePath)) {
             Files.createFile(infoFilePath);
@@ -173,7 +173,7 @@ public class ImageUploadUI extends UIBase {
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         try (BufferedWriter writer = Files.newBufferedWriter(infoFilePath, StandardOpenOption.APPEND)) {
-            writer.write(String.format("ImageID: %s, Username: %s, Bio: %s, Timestamp: %s, Likes: 0", imageId, username, bio, timestamp));
+            writer.write(String.format("ImageID: %s, Username: %s, Caption: %s, Timestamp: %s, Likes: 0", imageId, username, caption, timestamp));
             writer.newLine();
         }
 
@@ -188,11 +188,11 @@ public class ImageUploadUI extends UIBase {
         return name.substring(lastIndexOf + 1);
     }
 
-    private void saveBioAction(ActionEvent event) {
-        // Here you would handle saving the bio text
-        String bioText = bioTextArea.getText();
-        // For example, save the bio text to a file or database
-        JOptionPane.showMessageDialog(this, "Caption saved: " + bioText);
+    private void saveCaptionAction(ActionEvent event) {
+        // Here you would handle saving the caption text
+        String captionText = captionTextArea.getText();
+        // For example, save the caption text to a file or database
+        JOptionPane.showMessageDialog(this, "Caption saved: " + captionText);
     }
 
     private String readUsername() throws IOException {

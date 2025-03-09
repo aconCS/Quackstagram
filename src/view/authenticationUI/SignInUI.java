@@ -31,21 +31,30 @@ public class SignInUI extends UIBase {
                 .buildUI();
     }
 
+    /*
+    * Event handler that triggers when the sign-in button is clicked.
+    * Creates a new User object with the entered username and password upon successful verification.
+    * Navigates to the ProfileUI with the new User object.
+    * */
     private void onSignInClicked(ActionEvent event) {
         String enteredUsername = usernameField.getText();
         String enteredPassword = passwordField.getText();
 
         System.out.println(enteredUsername + " <-> " + enteredPassword);
-        User currentUser = new User(enteredUsername, "bio", enteredPassword);
         if (authController.verifyCredentials(enteredUsername, enteredPassword)) {
             System.out.println("Valid Credentials");
             // TODO TAKE USER ACCESS AWAY FROM signInUI MODEL
-            NavigationController.getInstance().navigate(this, new ProfileUI(currentUser));
+            User currentUser = new User(enteredUsername, "bio", enteredPassword);
+            NavigationController.getInstance().navigate(this, new ProfileUI(enteredUsername, currentUser));
         } else {
             System.out.println("Invalid Credentials");
         }
     }
 
+    /*
+    * Event handler that triggers when the create-account button is clicked.
+    * Navigates to the SignUpUI.
+    * */
     private void onRegisterNowClicked(ActionEvent event) {
         NavigationController.getInstance().navigate(this, new SignUpUI());
     }

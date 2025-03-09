@@ -11,7 +11,10 @@ public class AuthServices {
     private static final String credentialsFilePath = "resources/data/credentials.txt";
     private static final String profilePhotoStoragePath = "resources/img/storage/profile/";
 
-    // VERIFY CREDENTIALS
+    /*
+    * Reads the credentials file and verifies the entered username and password.
+    * Creates a new User object with the entered username and bio upon successful verification.
+    * */
     public boolean verifyCredentials(String username, String password) {
         try (BufferedReader reader = new BufferedReader(new FileReader(credentialsFilePath))) {
             String line;
@@ -39,6 +42,9 @@ public class AuthServices {
         }
     }
 
+    /*
+    * Reads the credentials file and checks if the entered username already exists.
+    * */
     public boolean doesUsernameExist(String username) {
         try (BufferedReader reader = new BufferedReader(new FileReader(credentialsFilePath))) {
             String line;
@@ -53,6 +59,9 @@ public class AuthServices {
         return false;
     }
 
+    /*
+    * Writes the entered username, password, and bio to the credentials file.
+    * */
     public void saveCredentials(String username, String password, String bio) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(credentialsFilePath, true))) {
             writer.write(username + ":" + password + ":" + bio);
@@ -62,6 +71,9 @@ public class AuthServices {
         }
     }
 
+    /*
+    * Writes image to a file with the username as the filename.
+    * */
     public void saveProfilePicture(File file, String username) {
         try {
             BufferedImage image = ImageIO.read(file);
@@ -72,6 +84,9 @@ public class AuthServices {
         }
     }
 
+    /*
+    * Saves the profile picture of the user with the entered username once a non-null file is chosen.
+    * */
     public void uploadProfilePicture(String username) {
         FileServices fileServices = new FileServices();
         File chosenFile = fileServices.openFileChooser("Upload Profile Picture", "jpg", "jpeg", "png");

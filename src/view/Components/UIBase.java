@@ -7,6 +7,7 @@ public class UIBase extends JFrame {
     private static final int HEIGHT = 500;
     private static final int WIDTH = 300;
 
+    // Sets the size of the frame and centers it on the screen
     // TODO FIND PREFERRED AND MINIMUM SIZE
     public UIBase() {
         setSize(WIDTH, HEIGHT);

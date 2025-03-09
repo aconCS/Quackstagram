@@ -3,7 +3,7 @@ package model;
 import java.util.List;
 import java.util.ArrayList;
 
-// Represents a picture on Quackstagram
+// Represents a post on Quackstagram
 public class Post {
     private String imagePath;
     private String caption;

@@ -1,6 +1,7 @@
 package view.coreUI;
 
 import model.User;
+import view.Components.HeaderPanel;
 import view.Components.NavigationPanel;
 import view.Components.UIBase;
 
@@ -35,7 +36,7 @@ public class ExploreUI extends UIBase {
         getContentPane().removeAll(); // Clear existing components
         setLayout(new BorderLayout()); // Reset the layout manager
 
-        JPanel headerPanel = createHeaderPanel(); // Method from your InstagramProfileUI class
+        JPanel headerPanel = new HeaderPanel("Explore"); // Method from your InstagramProfileUI class
         JPanel navigationPanel = new NavigationPanel(this); // Method from your InstagramProfileUI class
         JPanel mainContentPanel = createMainContentPanel();
 
@@ -91,26 +92,12 @@ public class ExploreUI extends UIBase {
         return mainContentPanel;
     }
 
-    private JPanel createHeaderPanel() {
-
-        // Header Panel (reuse from InstagramProfileUI or customize for home page)
-        // Header with the Register label
-        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        headerPanel.setBackground(new Color(51, 51, 51)); // Set a darker background for the header
-        JLabel lblRegister = new JLabel(" Explore 🐥");
-        lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
-        lblRegister.setForeground(Color.WHITE); // Set the text color to white
-        headerPanel.add(lblRegister);
-        headerPanel.setPreferredSize(new Dimension(WIDTH, 40)); // Give the header a fixed height
-        return headerPanel;
-    }
-
     private void displayImage(String imagePath) {
         getContentPane().removeAll();
         setLayout(new BorderLayout());
 
         // Add the header and navigation panels back
-        add(createHeaderPanel(), BorderLayout.NORTH);
+        add(new HeaderPanel("Explore"), BorderLayout.NORTH);
         add(new NavigationPanel(this), BorderLayout.SOUTH);
 
         JPanel imageViewerPanel = new JPanel(new BorderLayout());
@@ -181,7 +168,7 @@ public class ExploreUI extends UIBase {
         add(bottomPanel, BorderLayout.SOUTH);
 
         // Re-add the header and navigation panels
-        add(createHeaderPanel(), BorderLayout.NORTH);
+        add(new HeaderPanel("Explore"), BorderLayout.NORTH);
         add(new NavigationPanel(this), BorderLayout.SOUTH);
 
         // Panel for the back button
@@ -195,7 +182,7 @@ public class ExploreUI extends UIBase {
 
         backButton.addActionListener(e -> {
             getContentPane().removeAll();
-            add(createHeaderPanel(), BorderLayout.NORTH);
+            add(new HeaderPanel("Explore"), BorderLayout.NORTH);
             add(createMainContentPanel(), BorderLayout.CENTER);
             add(new NavigationPanel(this), BorderLayout.SOUTH);
             revalidate();
@@ -205,7 +192,7 @@ public class ExploreUI extends UIBase {
 
         usernameLabel.addActionListener(e -> {
             User user = new User(finalUsername); // Assuming User class has a constructor that takes a username
-            ProfileUI profileUI = new ProfileUI(user);
+            ProfileUI profileUI = new ProfileUI(user.getUsername(), user);
             profileUI.setVisible(true);
             dispose(); // Close the current frame
         });

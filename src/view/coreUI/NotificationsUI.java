@@ -23,7 +23,7 @@ public class NotificationsUI extends UIBase {
 
     private void initializeUI() {
         // Reuse the header and navigation panel creation methods from the InstagramProfileUI class
-        JPanel headerPanel = new HeaderPanel();
+        JPanel headerPanel = new HeaderPanel("Notifications");
         JPanel navigationPanel = new NavigationPanel(this);
 
         // Content Panel for notifications
