@@ -123,7 +123,7 @@ public class ProfileUI extends UIBase {
         currentUser.setFollowingCount(followingCount);
         currentUser.setPostCount(imageCount);
 
-        System.out.println("User posts: " + currentUser.getPostsCount());
+        System.out.println("Number of posts for this user" + currentUser.getPostsCount());
     }
 
     private void initializeUI() {
@@ -181,15 +181,16 @@ public class ProfileUI extends UIBase {
         JPanel statsPanel = new JPanel();
         statsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
         statsPanel.setBackground(new Color(249, 249, 249));
-        System.out.println("Number of posts for this user" + currentUser.getPostsCount());
+
+        // TODO MAKE statsLabel use Userservices for getter functions
         statsPanel.add(createStatLabel(Integer.toString(currentUser.getPostsCount()), "Posts"));
         statsPanel.add(createStatLabel(Integer.toString(currentUser.getFollowersCount()), "Followers"));
         statsPanel.add(createStatLabel(Integer.toString(currentUser.getFollowingCount()), "Following"));
         statsPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 10, 0)); // Add some vertical padding
 
-        // Follow Button
-        // Follow or Edit Profile Button
-        // followButton.addActionListener(e -> handleFollowAction(currentUser.getUsername()));
+        // TODO EXTRACT TO FOLLOW BUTTON FACTORY
+        // TODO ABSTRACT OVER BUTTON NAME
+        // TODO RENAME BUTTON
         JButton followButton;
         if (isCurrentUser) {
             followButton = new JButton("Edit Profile");
@@ -197,6 +198,8 @@ public class ProfileUI extends UIBase {
             followButton = new JButton("Follow");
 
             // Check if the current user is already being followed by the logged-in user
+            // TODO EXTRACT LOGIC TO isFollowing in FollowingServices
+            // TODO EXTRACT DATA HANDLING TO readFollowingData in FollowingRepository
             Path followingFilePath = Paths.get("resources/data", "following.txt");
             try (BufferedReader reader = Files.newBufferedReader(followingFilePath)) {
                 String line;
@@ -221,6 +224,9 @@ public class ProfileUI extends UIBase {
             });
         }
 
+        // TODO CREATE A followBUTTON FACTORY
+        // TODO HAVE A BOOLEAN DECIDE IF ITS EDIT PROFILE OR FOLLOWING
+        // TODO RENAME VARIABLE MORE APPROPRIATELY
         followButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         followButton.setFont(new Font("Arial", Font.BOLD, 12));
         followButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, followButton.getMinimumSize().height)); // Make the button fill the horizontal space
@@ -269,6 +275,8 @@ public class ProfileUI extends UIBase {
         Path usersFilePath = Paths.get("resources/data", "users.txt");
         String currentUserUsername = "";
 
+        // TODO IF REDUNDANT REMOVE
+        // TODO use UserServices.getLoggedInUsername instead
         try {
             // Read the current user's username from users.txt
             try (BufferedReader reader = Files.newBufferedReader(usersFilePath)) {
@@ -279,12 +287,14 @@ public class ProfileUI extends UIBase {
                 }
             }
 
+            // TODO CHANGE DEBUGGING OUTPUT TO "Logged in User is"
             System.out.println("Real user is " + currentUserUsername);
             // If currentUserUsername is not empty, process following.txt
+
+            // TODO CHANGE FOLLOWING LOGIC TO USE FollowingServices followUser method
             if (!currentUserUsername.isEmpty()) {
                 boolean found = false;
                 StringBuilder newContent = new StringBuilder();
-
                 // Read and process following.txt
                 if (Files.exists(followingFilePath)) {
                     try (BufferedReader reader = Files.newBufferedReader(followingFilePath)) {
@@ -321,6 +331,9 @@ public class ProfileUI extends UIBase {
         contentPanel.removeAll(); // Clear existing content
         contentPanel.setLayout(new GridLayout(0, 3, 5, 5)); // Grid layout for image grid
 
+        // TODO CREATE A initializeUserPosts method in UserServices
+        // TODO EXTRACT DATA HANDLING TO readUserPosts in UserRepository
+        // TODO USE List<Post>.getImagePath instead of reading from file
         Path imageDir = Paths.get("resources/img", "uploaded");
         try (Stream < Path > paths = Files.list(imageDir)) {
             paths.filter(path -> path.getFileName().toString().startsWith(currentUser.getUsername() + "_"))
