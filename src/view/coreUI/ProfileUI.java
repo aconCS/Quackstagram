@@ -68,7 +68,7 @@ public class ProfileUI extends UIBase {
             e.printStackTrace();
         }
 
-        // Step 2: Read following.txt to calculate followers and following
+        // Step 2: Read following.txt to calculate followers and following count
         Path followingFilePath = Paths.get("resources/data", "following.txt");
         try (BufferedReader followingReader = Files.newBufferedReader(followingFilePath)) {
             String line;
