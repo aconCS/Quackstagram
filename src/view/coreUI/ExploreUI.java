@@ -192,7 +192,7 @@ public class ExploreUI extends UIBase {
 
         usernameLabel.addActionListener(e -> {
             User user = new User(finalUsername); // Assuming User class has a constructor that takes a username
-            ProfileUI profileUI = new ProfileUI(user.getUsername(), user);
+            ProfileUI profileUI = new ProfileUI(user.getUsername());
             profileUI.setVisible(true);
             dispose(); // Close the current frame
         });

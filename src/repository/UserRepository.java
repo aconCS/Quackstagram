@@ -1,7 +1,5 @@
 package repository;
 
-import model.Post;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,27 +10,28 @@ import java.util.List;
 public class UserRepository {
 
     private final String followersFilePath = "resources/data/following.txt";
-    private Path usersFilePath = Paths.get("resources/data", "users.txt");
+    private final Path imageDetailsFilePath = Paths.get("resources/img", "image_details.txt");
+    private final Path usersFilePath = Paths.get("resources/data", "users.txt");
 
     public UserRepository(){ }
 
-    public List<Post> loadPostData(String username){
-        List<Post> posts = new ArrayList<>();
-        Path imageDetailsFilePath = Paths.get("resources/img", "image_details.txt");
+    public int readPostCount(String username){
+        int imageCount = 0;
+
         try (BufferedReader imageDetailsReader = Files.newBufferedReader(imageDetailsFilePath)) {
             String line;
             while ((line = imageDetailsReader.readLine()) != null) {
                 if (line.contains("Username: " + username)) {
-                    //imageCount++;
+                    imageCount++;
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return posts;
+        return imageCount;
     }
 
-    // Method to read the username of the logged in user
+    // Method to read the username of the logged-in user
     public String readLoggedInUsername(){
         String loggedInUsername = "";
         // Read the current user's username from users.txt
@@ -49,37 +48,48 @@ public class UserRepository {
         return loggedInUsername;
     }
 
-    // TODO : CHANGE LOGIC
-    public List<Post> readPostData(String username){
-        List<Post> posts = new ArrayList<>();
-        Path imageDetailsFilePath = Paths.get("resources/img", "image_details.txt");
-        try (BufferedReader imageDetailsReader = Files.newBufferedReader(imageDetailsFilePath)) {
-            String line;
-            while ((line = imageDetailsReader.readLine()) != null) {
-                if (line.contains("Username: " + username)) {
-                    //imageCount++;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return posts;
-    }
-
     // Method to follow a user
     public void writeFollowData(String follower, String followed) {
+        System.out.println("Writing follow data");
         if (!isAlreadyFollowing(follower, followed)) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(followersFilePath, true))) {
                 writer.write(follower + ":" + followed);
                 writer.newLine();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
     }
 
+    public void removeFollowData(String follower, String followed) throws IOException {
+        System.out.println("Removing follow data");
+        if (!isAlreadyFollowing(follower, followed)) {
+            System.out.println("User is not following this user");
+            return;
+        }
+        String followerLine = follower + ":" + followed;
+
+        File file = new File(followersFilePath);
+        File temp = new File("resources/data/temp.txt");
+        PrintWriter out = new PrintWriter(new FileWriter(temp));
+        Files.lines(file.toPath())
+                .filter(line -> !line.contains(followerLine))
+                .forEach(out::println);
+        out.flush();
+        out.close();
+        if(!file.delete()){
+            System.out.println("Could not delete file");
+            return;
+        }
+        if(!temp.renameTo(file)){
+            System.out.println("Could not rename file");
+        }
+
+
+    }
+
     // Method to check if a user is already following another user
-    private boolean isAlreadyFollowing(String follower, String followed) {
+    public boolean isAlreadyFollowing(String follower, String followed) {
         try (BufferedReader reader = new BufferedReader(new FileReader(followersFilePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -104,8 +114,8 @@ public class UserRepository {
                     followers.add(parts[0]);
                 }
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
         return followers;
     }
@@ -121,8 +131,8 @@ public class UserRepository {
                     following.add(parts[1]);
                 }
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
         return following;
     }
@@ -139,8 +149,8 @@ public class UserRepository {
                     break; // Exit the loop once the matching bio is found
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
 
         return bio;

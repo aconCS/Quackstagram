@@ -88,7 +88,7 @@ public class NavigationPanel extends JPanel {
         }
         User user = new User(loggedInUsername);
         // Navigate to profile UI
-        NavigationController.getInstance().navigate(currFrame, new ProfileUI(user.getUsername(), user));
+        NavigationController.getInstance().navigate(currFrame, new ProfileUI(user.getUsername()));
     }
 
     private void openImageUploadUI() { NavigationController.getInstance().navigate(currFrame, new ImageUploadUI()); }

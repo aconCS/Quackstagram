@@ -1,9 +1,3 @@
-Xylo: Lorin
-Zara: Lorin
-Mystar: Lorin; Zara
-Lorin: Mystar; Zara
-Username: 1
-1: Zara
-Raistlin0905: Xylo
+1:1
+1:Xylo
 1:Lorin
-1:Raistlin0905

@@ -45,7 +45,7 @@ public class SignInUI extends UIBase {
             System.out.println("Valid Credentials");
             // TODO TAKE USER ACCESS AWAY FROM signInUI MODEL
             User currentUser = new User(enteredUsername, "bio", enteredPassword);
-            NavigationController.getInstance().navigate(this, new ProfileUI(enteredUsername, currentUser));
+            NavigationController.getInstance().navigate(this, new ProfileUI(enteredUsername));
         } else {
             System.out.println("Invalid Credentials");
         }

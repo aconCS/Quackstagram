@@ -9,8 +9,6 @@ import javax.swing.*;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.awt.*;
 import java.nio.file.*;
@@ -25,11 +23,11 @@ public class ProfileUI extends UIBase {
 
     private JPanel contentPanel; // Panel to display the image grid or the clicked image
     private JPanel headerPanel; // Panel for the header
-    private User currentUser; // User object to store the current user's information
     private UserServices userService;
+    private String username;
 
-    public ProfileUI(String username, User user) {
-        this.currentUser = user;
+    public ProfileUI(String username) {
+        this.username = username;
         setTitle("DACS Profile");
         
         userService = new UserServices(username);
@@ -65,26 +63,8 @@ public class ProfileUI extends UIBase {
     }
 
     private JPanel createHeaderPanel() {
-        boolean isCurrentUser = false;
-        String loggedInUsername = "";
-
-        // TODO EXTRACT LOGIC TO getLoggedInUsername IN UserServices
-        // TODO EXTRACT DATA HANDLING TO readLoggedInUser IN UserRepository
-        // Read the logged-in user's username from users.txt
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get("resources/data", "users.txt"))) {
-            String line = reader.readLine();
-            if (line != null) {
-                loggedInUsername = line.split(":")[0].trim();
-                isCurrentUser = loggedInUsername.equals(currentUser.getUsername());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try (Stream < String > lines = Files.lines(Paths.get("resources/data", "users.txt"))) {
-            isCurrentUser = lines.anyMatch(line -> line.startsWith(currentUser.getUsername() + ":"));
-        } catch (IOException e) {
-            e.printStackTrace(); // Log or handle the exception as appropriate
-        }
+        String loggedInUsername = userService.getLoggedInUsername();
+        boolean isCurrentUser = loggedInUsername.equals(username);
 
         // Header Panel
         JPanel headerPanel = new JPanel();
@@ -96,7 +76,7 @@ public class ProfileUI extends UIBase {
         topHeaderPanel.setBackground(new Color(249, 249, 249));
 
         // Profile image
-        ImageIcon profileIcon = new ImageIcon(new ImageIcon("resources/img/storage/profile/" + currentUser.getUsername() + ".png").getImage().getScaledInstance(PROFILE_IMAGE_SIZE, PROFILE_IMAGE_SIZE, Image.SCALE_SMOOTH));
+        ImageIcon profileIcon = new ImageIcon(new ImageIcon("resources/img/storage/profile/" + username + ".png").getImage().getScaledInstance(PROFILE_IMAGE_SIZE, PROFILE_IMAGE_SIZE, Image.SCALE_SMOOTH));
         JLabel profileImage = new JLabel(profileIcon);
         profileImage.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         topHeaderPanel.add(profileImage, BorderLayout.WEST);
@@ -107,65 +87,18 @@ public class ProfileUI extends UIBase {
         statsPanel.setBackground(new Color(249, 249, 249));
 
         // TODO MAKE statsLabel use Userservices for getter functions
-        statsPanel.add(createStatLabel(Integer.toString(currentUser.getPostsCount()), "Posts"));
-        statsPanel.add(createStatLabel(Integer.toString(currentUser.getFollowersCount()), "Followers"));
-        statsPanel.add(createStatLabel(Integer.toString(currentUser.getFollowingCount()), "Following"));
+        statsPanel.add(createStatLabel(Integer.toString(userService.getPostCount(username)), "Posts"));
+        statsPanel.add(createStatLabel(Integer.toString(userService.getFollowerCount(username)), "Followers"));
+        statsPanel.add(createStatLabel(Integer.toString(userService.getFollowingCount(username)), "Following"));
         statsPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 10, 0)); // Add some vertical padding
 
-        // TODO EXTRACT TO FOLLOW BUTTON FACTORY
-        // TODO ABSTRACT OVER BUTTON NAME
-        // TODO RENAME BUTTON
-        JButton followButton;
-        if (isCurrentUser) {
-            followButton = new JButton("Edit Profile");
-        } else {
-            followButton = new JButton("Follow");
-
-            // Check if the current user is already being followed by the logged-in user
-            // TODO EXTRACT LOGIC TO isFollowing in FollowingServices
-            // TODO EXTRACT DATA HANDLING TO readFollowingData in FollowingRepository
-            Path followingFilePath = Paths.get("resources/data", "following.txt");
-            try (BufferedReader reader = Files.newBufferedReader(followingFilePath)) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split(":");
-                    if (parts[0].trim().equals(loggedInUsername)) {
-                        String[] followedUsers = parts[1].split(";");
-                        for (String followedUser: followedUsers) {
-                            if (followedUser.trim().equals(currentUser.getUsername())) {
-                                followButton.setText("Following");
-                                break;
-                            }
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            followButton.addActionListener(e -> {
-                // TODO CHANGE LOGIC TO NOT ACCESS USER MODEL
-                userService.followUser(userService.getLoggedInUsername(), currentUser.getUsername());
-                followButton.setText("Following");
-            });
-        }
-
-        // TODO CREATE A followBUTTON FACTORY
-        // TODO HAVE A BOOLEAN DECIDE IF ITS EDIT PROFILE OR FOLLOWING
-        // TODO RENAME VARIABLE MORE APPROPRIATELY
-        followButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        followButton.setFont(new Font("Arial", Font.BOLD, 12));
-        followButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, followButton.getMinimumSize().height)); // Make the button fill the horizontal space
-        followButton.setBackground(new Color(225, 228, 232)); // A soft, appealing color that complements the UI
-        followButton.setForeground(Color.BLACK);
-        followButton.setOpaque(true);
-        followButton.setBorderPainted(false);
-        followButton.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0)); // Add some vertical padding
+        JButton profileButton = createProfileButton(isCurrentUser, loggedInUsername);
 
         // Add Stats and Follow Button to a combined Panel
         JPanel statsFollowPanel = new JPanel();
         statsFollowPanel.setLayout(new BoxLayout(statsFollowPanel, BoxLayout.Y_AXIS));
         statsFollowPanel.add(statsPanel);
-        statsFollowPanel.add(followButton);
+        statsFollowPanel.add(profileButton);
         topHeaderPanel.add(statsFollowPanel, BorderLayout.CENTER);
 
         headerPanel.add(topHeaderPanel);
@@ -175,12 +108,12 @@ public class ProfileUI extends UIBase {
         profileNameAndBioPanel.setLayout(new BorderLayout());
         profileNameAndBioPanel.setBackground(new Color(249, 249, 249));
 
-        JLabel profileNameLabel = new JLabel(currentUser.getUsername());
+        JLabel profileNameLabel = new JLabel(username);
         profileNameLabel.setFont(new Font("Arial", Font.BOLD, 14));
         profileNameLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Padding on the sides
 
-        JTextArea profileBio = new JTextArea(currentUser.getBio());
-        System.out.println("This is the bio " + currentUser.getUsername());
+        JTextArea profileBio = new JTextArea(username);
+        System.out.println("This is the bio " + username);
         profileBio.setEditable(false);
         profileBio.setFont(new Font("Arial", Font.PLAIN, 12));
         profileBio.setBackground(new Color(249, 249, 249));
@@ -195,6 +128,35 @@ public class ProfileUI extends UIBase {
 
     }
 
+    // TODO MAKE HEADER UPDATE WHEN ACTION IS PRESSED
+    // TODO FIGURE THIS OUT AFTER profileUI optimization is Done
+    private JButton createProfileButton(boolean isCurrentUser, String loggedInUsername) {
+        JButton profileButton = new JButton("Edit Profile");
+        if (!isCurrentUser) {
+            String buttonText = userService.isFollowing(loggedInUsername, username) ? "Unfollow" : "Follow";
+            profileButton.setText(buttonText);
+            profileButton.addActionListener(e -> {
+                if(userService.isFollowing(loggedInUsername, username)){
+                    userService.unFollowUser(loggedInUsername, username);
+                    profileButton.setText("Follow");
+                } else {
+                    userService.followUser(loggedInUsername, username);
+                    profileButton.setText("Unfollow");
+                }
+            });
+        }
+
+        profileButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        profileButton.setFont(new Font("Arial", Font.BOLD, 12));
+        profileButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, profileButton.getMinimumSize().height)); // Make the button fill the horizontal space
+        profileButton.setBackground(new Color(225, 228, 232)); // A soft, appealing color that complements the UI
+        profileButton.setForeground(Color.BLACK);
+        profileButton.setOpaque(true);
+        profileButton.setBorderPainted(false);
+        profileButton.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0)); // Add some vertical padding
+        return profileButton;
+    }
+
     private void initializeImageGrid() {
         contentPanel.removeAll(); // Clear existing content
         contentPanel.setLayout(new GridLayout(0, 3, 5, 5)); // Grid layout for image grid
@@ -204,7 +166,7 @@ public class ProfileUI extends UIBase {
         // TODO USE List<Post>.getImagePath instead of reading from file
         Path imageDir = Paths.get("resources/img", "uploaded");
         try (Stream < Path > paths = Files.list(imageDir)) {
-            paths.filter(path -> path.getFileName().toString().startsWith(currentUser.getUsername() + "_"))
+            paths.filter(path -> path.getFileName().toString().startsWith(username + "_"))
                     .forEach(path -> {
                         ImageIcon imageIcon = new ImageIcon(new ImageIcon(path.toString()).getImage().getScaledInstance(GRID_IMAGE_SIZE, GRID_IMAGE_SIZE, Image.SCALE_SMOOTH));
                         JLabel imageLabel = new JLabel(imageIcon);
