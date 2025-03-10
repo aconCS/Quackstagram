@@ -1,5 +1,6 @@
 package model;
 
+import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -39,8 +40,7 @@ public class User {
         postsCount++;
     }
 
-    // TODO EXTRACT SERVICES FROM MODEL
-    // Getter methods for user details
+    // Getter methods
     public String getUsername() { return username; }
     public String getBio() { return bio; }
     public void setBio(String bio) {this.bio = bio; }
@@ -49,15 +49,15 @@ public class User {
     public int getFollowingCount() { return followingCount; }
     public List<Post> getPosts() { return posts; }
 
-    // Setter methods for followers and following counts
+    // Setter methods
     public void setFollowersCount(int followersCount) { this.followersCount = followersCount; }
     public void setFollowingCount(int followingCount) { this.followingCount = followingCount; }
     public void setPostCount(int postCount) { this.postsCount = postCount;}
+    public void setPosts(List<Post> posts) { this.posts = posts; }
 
     // Implement the toString method for saving user information
     @Override
     public String toString() {
     return username + ":" + bio + ":" + password; // Format as needed
 }
-
 }

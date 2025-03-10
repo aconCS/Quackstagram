@@ -1,7 +1,11 @@
 package controller;
 
+import model.Post;
 import model.User;
 import services.UserServices;
+
+import java.nio.file.Path;
+import java.util.List;
 
 public class UserController {
     private final UserServices userServices;
@@ -10,12 +14,17 @@ public class UserController {
     public UserController(String username){
         user = new User(username);
         this.userServices = new UserServices(user);
+        userServices.initializeUserData();
     }
 
     public UserController(){
-        this.userServices = null;
-        this.user = null;
+        this.user = new User("");
+        this.userServices = new UserServices(user);
     }
+
+    public List<Path> getPostPaths(){ return userServices.getPostPaths(); }
+
+    public List<Post> getPosts(){ return user.getPosts(); }
 
     public String getBio(){ return user.getBio(); }
 
@@ -27,9 +36,15 @@ public class UserController {
 
     public boolean isFollowing(String currentUser, String loggedInUser){ return userServices.isFollowing(currentUser, loggedInUser); }
 
-    public void unFollowUser(String follower, String followed){ userServices.unFollowUser(follower, followed); }
+    public void unFollowUser(String follower, String followed){
+        userServices.unFollowUser(follower, followed);
+        user.setFollowersCount(userServices.loadFollowerCount(followed));
+    }
 
-    public void followUser(String follower, String followed){ userServices.followUser(follower, followed); }
+    public void followUser(String follower, String followed){
+        userServices.followUser(follower, followed);
+        user.setFollowersCount(userServices.loadFollowerCount(followed));
+    }
 
     public String getLoggedInUsername(){ return userServices.getLoggedInUsername(); }
 }

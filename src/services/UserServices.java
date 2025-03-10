@@ -1,9 +1,15 @@
 package services;
 
+import model.Post;
 import model.User;
 import repository.UserRepository;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserServices{
 
@@ -16,15 +22,14 @@ public class UserServices{
         this.userRepository = new UserRepository();
         this.username = user.getUsername();
         this.user = user;
-
-        initializeUserData();
     }
 
     public void initializeUserData(){
-        user.setBio(setBioData(username));
-        user.setFollowersCount(setFollowerCount(username));
-        user.setFollowingCount(setFollowingCount(username));
-        user.setPostCount(setPostCount(username));
+        user.setBio(loadBioData(username));
+        user.setFollowersCount(loadFollowerCount(username));
+        user.setFollowingCount(loadFollowingCount(username));
+        user.setPostCount(loadPostCount(username));
+        user.setPosts(loadUserPosts(username));
 
         System.out.println("Bio for " + user.getUsername() + ": " + user.getBio());
         System.out.println("Number of posts for this user: " + user.getPostsCount());
@@ -42,15 +47,27 @@ public class UserServices{
         }
     }
 
+    public List<Path> getPostPaths() {
+        List<Path> postPaths = new ArrayList<>();
+
+        for(Post post : user.getPosts()){
+            postPaths.add(Paths.get(post.getImagePath()));
+        }
+
+        return postPaths;
+    }
+
     public void followUser(String follower, String followed) { userRepository.writeFollowData(follower, followed); }
 
     public String getLoggedInUsername() { return userRepository.readLoggedInUsername(); }
 
-    public int setPostCount(String username) { return userRepository.readPostCount(username); }
+    public int loadPostCount(String username) { return userRepository.readPostCount(username); }
 
-    public int setFollowerCount(String username){ return userRepository.readFollowersData(username).size();}
+    public int loadFollowerCount(String username){ return userRepository.readFollowersData(username).size();}
 
-    public int setFollowingCount(String username){ return userRepository.readFollowingData(username).size(); }
+    public int loadFollowingCount(String username){ return userRepository.readFollowingData(username).size(); }
 
-    public String setBioData(String username) { return userRepository.readBioData(username); }
+    public String loadBioData(String username) { return userRepository.readBioData(username); }
+
+    public List<Post> loadUserPosts(String username) { return userRepository.readUserPosts(username); }
 }

@@ -1,5 +1,6 @@
 package view.coreUI;
 
+import controller.UserController;
 import view.Components.HeaderPanel;
 import view.Components.NavigationPanel;
 import view.Components.UIBase;
@@ -38,9 +39,12 @@ public class HomeUI extends UIBase {
     private final JPanel cardPanel;
     private final JPanel homePanel;
     private final JPanel imageViewPanel;
+    private final UserController userController;
 
     public HomeUI() {
         setTitle("Quakstagram Home");
+
+        userController = new UserController();
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
@@ -150,19 +154,9 @@ public class HomeUI extends UIBase {
         Path detailsPath = Paths.get("resources/img", "image_details.txt");
         StringBuilder newContent = new StringBuilder();
         boolean updated = false;
-        String currentUser = "";
+        String currentUser = userController.getLoggedInUsername();
         String imageOwner = "";
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-
-        // Retrieve the current user from users.txt
-        try (BufferedReader userReader = Files.newBufferedReader(Paths.get("resources/data", "users.txt"))) {
-            String line = userReader.readLine();
-            if (line != null) {
-                currentUser = line.split(":")[0].trim();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         // Read and update image_details.txt
         try (BufferedReader reader = Files.newBufferedReader(detailsPath)) {
@@ -205,15 +199,7 @@ public class HomeUI extends UIBase {
     }
 
     private String[][] createSampleData() {
-        String currentUser = "";
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get("resources/data", "users.txt"))) {
-            String line = reader.readLine();
-            if (line != null) {
-                currentUser = line.split(":")[0].trim();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String currentUser = userController.getLoggedInUsername();
 
         String followedUsers = "";
         try (BufferedReader reader = Files.newBufferedReader(Paths.get("resources/data", "following.txt"))) {
@@ -288,18 +274,7 @@ public class HomeUI extends UIBase {
         userName.setFont(new Font("Arial", Font.BOLD, 18));
         userPanel.add(userName); //User Name
 
-        JButton likeButton = new JButton("❤");
-        likeButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-        likeButton.setBackground(LIKE_BUTTON_COLOR); // Set the background color for the like button
-        likeButton.setOpaque(true);
-        likeButton.setBorderPainted(false); // Remove border
-        likeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleLikeAction(imageId, likesLabel); // Update this line
-                refreshDisplayImage(postData, imageId); // Refresh the view
-            }
-        });
+        JButton likeButton = createLikeButton(postData, imageId, likesLabel);
 
         // Information panel at the bottom
         JPanel infoPanel = new JPanel();
@@ -316,6 +291,22 @@ public class HomeUI extends UIBase {
         imageViewPanel.repaint();
 
         cardLayout.show(cardPanel, "ImageView"); // Switch to the image view
+    }
+
+    private JButton createLikeButton(String[] postData, String imageId, JLabel likesLabel) {
+        JButton likeButton = new JButton("❤");
+        likeButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        likeButton.setBackground(LIKE_BUTTON_COLOR); // Set the background color for the like button
+        likeButton.setOpaque(true);
+        likeButton.setBorderPainted(false); // Remove border
+        likeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleLikeAction(imageId, likesLabel); // Update this line
+                refreshDisplayImage(postData, imageId); // Refresh the view
+            }
+        });
+        return likeButton;
     }
 
     private void refreshDisplayImage(String[] postData, String imageId) {

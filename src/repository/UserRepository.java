@@ -1,11 +1,14 @@
 package repository;
 
+import model.Post;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class UserRepository {
 
@@ -154,5 +157,44 @@ public class UserRepository {
         }
 
         return bio;
+    }
+
+    public List<Post> readUserPosts(String currUsername){
+        List<Post> posts = new ArrayList<>();
+
+        Path detailsPath = Paths.get("resources/img", "image_details.txt");
+
+        try (Stream<String> lines = Files.lines(detailsPath)) {
+            // Iterate through the lines of the file one by one
+            lines.forEach(line -> {
+                if (line.contains("ImageID: ")) {
+                    // Parse the details line into components
+                    String[] parts = line.split(", ");
+                    String username = parts[1].split(": ")[1];
+
+                    // If the username matches the current user, parse the post details
+                    if (username.equals(currUsername)) {
+                        String imageId = parts[0].split(": ")[1];
+                        String caption = parts[2].split(": ")[1];
+
+                        int likes = 0;
+                        try {
+                            likes = Integer.parseInt(parts[4].split(": ")[1]);
+                        } catch (NumberFormatException e) {
+                            System.err.println("Failed to parse likes for image ID: " + imageId);
+                        }
+
+                        String imgPath = "resources/img/uploaded/" + imageId + ".png";
+
+                        posts.add(new Post(imgPath, caption, likes, new ArrayList<>()));
+                    }
+                }
+            });
+        } catch (IOException ex) {
+            ex.printStackTrace(); // Handle the exception properly
+        }
+
+
+        return posts;
     }
 }

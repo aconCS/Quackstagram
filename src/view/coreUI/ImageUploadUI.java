@@ -1,5 +1,6 @@
 package view.coreUI;
 
+import controller.UserController;
 import view.Components.HeaderPanel;
 import view.Components.NavigationPanel;
 import view.Components.UIBase;
@@ -27,14 +28,17 @@ public class ImageUploadUI extends UIBase {
     private JButton uploadButton;
     private JButton saveButton;
     private boolean imageUploaded = false;
+    private final UserController userController;
 
     public ImageUploadUI() {
         setTitle("Upload Image");
+        userController = new UserController();
         initializeUI();
     }
 
     private void initializeUI() {
         JPanel headerPanel = new HeaderPanel("Upload Image");
+
         JPanel navigationPanel = new NavigationPanel(this);
 
         // Main content panel
@@ -89,7 +93,7 @@ public class ImageUploadUI extends UIBase {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             try {
-                String username = readUsername(); // Read username from users.txt
+                String username = userController.getLoggedInUsername(); // Read username from users.txt
                 int imageId = getNextImageId(username);
                 String fileExtension = getFileExtension(selectedFile);
                 String newFileName = username + "_" + imageId + "." + fileExtension;
@@ -194,16 +198,4 @@ public class ImageUploadUI extends UIBase {
         // For example, save the caption text to a file or database
         JOptionPane.showMessageDialog(this, "Caption saved: " + captionText);
     }
-
-    private String readUsername() throws IOException {
-        Path usersFilePath = Paths.get("resources/data", "users.txt");
-        try (BufferedReader reader = Files.newBufferedReader(usersFilePath)) {
-            String line = reader.readLine();
-            if (line != null) {
-                return line.split(":")[0]; // Extract the username from the first line
-            }
-        }
-        return null; // Return null if no username is found
-    }
-
 }

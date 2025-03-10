@@ -5,16 +5,23 @@ import java.util.ArrayList;
 
 // Represents a post on Quackstagram
 public class Post {
-    private String imagePath;
-    private String caption;
+    private final String imagePath;
+    private final String caption;
     private int likesCount;
-    private List<String> comments;
+    private final List<String> comments;
 
     public Post(String imagePath, String caption) {
         this.imagePath = imagePath;
         this.caption = caption;
         this.likesCount = 0;
         this.comments = new ArrayList<>();
+    }
+
+    public Post(String imagePath, String caption, int likesCount, List<String> comments) {
+        this.imagePath = imagePath;
+        this.caption = caption;
+        this.likesCount = likesCount;
+        this.comments = comments;
     }
 
     // Add a comment to the picture
