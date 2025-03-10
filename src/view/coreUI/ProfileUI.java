@@ -1,7 +1,6 @@
 package view.coreUI;
 
-import model.User;
-import services.UserServices;
+import controller.UserController;
 import view.Components.NavigationPanel;
 import view.Components.UIBase;
 
@@ -23,14 +22,15 @@ public class ProfileUI extends UIBase {
 
     private JPanel contentPanel; // Panel to display the image grid or the clicked image
     private JPanel headerPanel; // Panel for the header
-    private UserServices userService;
+    private UserController userController;
     private String username;
 
     public ProfileUI(String username) {
         this.username = username;
         setTitle("DACS Profile");
-        
-        userService = new UserServices(username);
+
+        //TODO ACCESS VIA AUTHCONTROLLER
+        userController = new UserController(username);
 
         contentPanel = new JPanel();
         headerPanel = createHeaderPanel(); // Initialize header panel
@@ -63,7 +63,7 @@ public class ProfileUI extends UIBase {
     }
 
     private JPanel createHeaderPanel() {
-        String loggedInUsername = userService.getLoggedInUsername();
+        String loggedInUsername = userController.getLoggedInUsername();
         boolean isCurrentUser = loggedInUsername.equals(username);
 
         // Header Panel
@@ -87,9 +87,9 @@ public class ProfileUI extends UIBase {
         statsPanel.setBackground(new Color(249, 249, 249));
 
         // TODO MAKE statsLabel use Userservices for getter functions
-        statsPanel.add(createStatLabel(Integer.toString(userService.getPostCount(username)), "Posts"));
-        statsPanel.add(createStatLabel(Integer.toString(userService.getFollowerCount(username)), "Followers"));
-        statsPanel.add(createStatLabel(Integer.toString(userService.getFollowingCount(username)), "Following"));
+        statsPanel.add(createStatLabel(Integer.toString(userController.getPostCount()), "Posts"));
+        statsPanel.add(createStatLabel(Integer.toString(userController.getFollowerCount()), "Followers"));
+        statsPanel.add(createStatLabel(Integer.toString(userController.getFollowingCount()), "Following"));
         statsPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 10, 0)); // Add some vertical padding
 
         JButton profileButton = createProfileButton(isCurrentUser, loggedInUsername);
@@ -133,14 +133,14 @@ public class ProfileUI extends UIBase {
     private JButton createProfileButton(boolean isCurrentUser, String loggedInUsername) {
         JButton profileButton = new JButton("Edit Profile");
         if (!isCurrentUser) {
-            String buttonText = userService.isFollowing(loggedInUsername, username) ? "Unfollow" : "Follow";
+            String buttonText = userController.isFollowing(loggedInUsername, username) ? "Unfollow" : "Follow";
             profileButton.setText(buttonText);
             profileButton.addActionListener(e -> {
-                if(userService.isFollowing(loggedInUsername, username)){
-                    userService.unFollowUser(loggedInUsername, username);
+                if(userController.isFollowing(loggedInUsername, username)){
+                    userController.unFollowUser(loggedInUsername, username);
                     profileButton.setText("Follow");
                 } else {
-                    userService.followUser(loggedInUsername, username);
+                    userController.followUser(loggedInUsername, username);
                     profileButton.setText("Unfollow");
                 }
             });

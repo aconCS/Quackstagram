@@ -8,22 +8,23 @@ import java.io.IOException;
 public class UserServices{
 
     private final UserRepository userRepository;
-    private final User user;
     private final String username;
+    private final User user;
 
-    public UserServices(String username) {
+
+    public UserServices(User user) {
         this.userRepository = new UserRepository();
-        this.username = username;
-        user = new User(username);
+        this.username = user.getUsername();
+        this.user = user;
 
         initializeUserData();
     }
 
     public void initializeUserData(){
-        user.setBio(getBioData(username));
-        user.setFollowersCount(getFollowerCount(username));
-        user.setFollowingCount(getFollowingCount(username));
-        user.setPostCount(getPostCount(username));
+        user.setBio(setBioData(username));
+        user.setFollowersCount(setFollowerCount(username));
+        user.setFollowingCount(setFollowingCount(username));
+        user.setPostCount(setPostCount(username));
 
         System.out.println("Bio for " + user.getUsername() + ": " + user.getBio());
         System.out.println("Number of posts for this user: " + user.getPostsCount());
@@ -45,14 +46,11 @@ public class UserServices{
 
     public String getLoggedInUsername() { return userRepository.readLoggedInUsername(); }
 
-    public int getPostCount(String username) { return userRepository.readPostCount(username); }
+    public int setPostCount(String username) { return userRepository.readPostCount(username); }
 
-    public int getFollowerCount(String username){ return userRepository.readFollowersData(username).size();}
+    public int setFollowerCount(String username){ return userRepository.readFollowersData(username).size();}
 
-    public int getFollowingCount(String username){ return userRepository.readFollowingData(username).size(); }
+    public int setFollowingCount(String username){ return userRepository.readFollowingData(username).size(); }
 
-    public String getBioData(String username) {
-        return userRepository.readBioData(username);
-    }
-
+    public String setBioData(String username) { return userRepository.readBioData(username); }
 }

@@ -1,6 +1,7 @@
 package view.Components;
 
 import controller.NavigationController;
+import controller.UserController;
 import model.User;
 import view.coreUI.*;
 
@@ -13,11 +14,13 @@ import java.nio.file.Paths;
 
 public class NavigationPanel extends JPanel {
 
+    private final UserController userController;
     private static final int NAV_ICON_SIZE = 20; // Size for navigation icons
     private final JFrame currFrame;
 
     // TODO CHANGE
     public NavigationPanel(JFrame currFrame) {
+        this.userController = new UserController();
         this.currFrame = currFrame;
         buildNavigationPanel();
     }
@@ -73,22 +76,8 @@ public class NavigationPanel extends JPanel {
     * Reads the logged-in user's username from users.txt and navigates to the profile UI.
     * */
     private void openProfileUI() {
-        String loggedInUsername = "";
-
-        // TODO HANDLE SERVICE OUTSIDE VIEW LAYER
-        // TODO SERVICE IS READING THE loggedIN USER FROM DATA FILE
-        // Read the logged-in user's username from users.txt
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get("resources/data", "users.txt"))) {
-            String line = reader.readLine();
-            if (line != null) {
-                loggedInUsername = line.split(":")[0].trim();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        User user = new User(loggedInUsername);
         // Navigate to profile UI
-        NavigationController.getInstance().navigate(currFrame, new ProfileUI(user.getUsername()));
+        NavigationController.getInstance().navigate(currFrame, new ProfileUI(userController.getLoggedInUsername()));
     }
 
     private void openImageUploadUI() { NavigationController.getInstance().navigate(currFrame, new ImageUploadUI()); }

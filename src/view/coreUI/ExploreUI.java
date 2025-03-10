@@ -1,9 +1,10 @@
 package view.coreUI;
 
+import controller.NavigationController;
 import model.User;
-import view.Components.HeaderPanel;
 import view.Components.NavigationPanel;
 import view.Components.UIBase;
+import view.coreUI.ProfileUI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,6 +12,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,11 +21,14 @@ import java.nio.file.Paths;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ExploreUI extends UIBase {
 
     private final int WIDTH = this.getWidth();
+    private static final int NAV_ICON_SIZE = 20; // Size for navigation icons
     private final int IMAGE_SIZE = WIDTH / 3; // Size for each image in the grid
 
     public ExploreUI() {
@@ -36,7 +41,7 @@ public class ExploreUI extends UIBase {
         getContentPane().removeAll(); // Clear existing components
         setLayout(new BorderLayout()); // Reset the layout manager
 
-        JPanel headerPanel = new HeaderPanel("Explore"); // Method from your InstagramProfileUI class
+        JPanel headerPanel = createHeaderPanel(); // Method from your InstagramProfileUI class
         JPanel navigationPanel = new NavigationPanel(this); // Method from your InstagramProfileUI class
         JPanel mainContentPanel = createMainContentPanel();
 
@@ -62,11 +67,11 @@ public class ExploreUI extends UIBase {
         JPanel imageGridPanel = new JPanel(new GridLayout(0, 3, 2, 2)); // 3 columns, auto rows
 
         // Load images from the uploaded folder
-        File imageDir = new File("resources/img/uploaded");
+        File imageDir = new File("img/uploaded");
         if (imageDir.exists() && imageDir.isDirectory()) {
             File[] imageFiles = imageDir.listFiles((dir, name) -> name.matches(".*\\.(png|jpg|jpeg)"));
             if (imageFiles != null) {
-                for (File imageFile: imageFiles) {
+                for (File imageFile : imageFiles) {
                     ImageIcon imageIcon = new ImageIcon(new ImageIcon(imageFile.getPath()).getImage().getScaledInstance(IMAGE_SIZE, IMAGE_SIZE, Image.SCALE_SMOOTH));
                     JLabel imageLabel = new JLabel(imageIcon);
                     imageLabel.addMouseListener(new MouseAdapter() {
@@ -79,7 +84,6 @@ public class ExploreUI extends UIBase {
                 }
             }
         }
-
         JScrollPane scrollPane = new JScrollPane(imageGridPanel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -92,12 +96,26 @@ public class ExploreUI extends UIBase {
         return mainContentPanel;
     }
 
+
+    private JPanel createHeaderPanel() {
+        // Header Panel (reuse from InstagramProfileUI or customize for home page)
+        // Header with the Register label
+        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        headerPanel.setBackground(new Color(51, 51, 51)); // Set a darker background for the header
+        JLabel lblRegister = new JLabel(" Explore 🐥");
+        lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
+        lblRegister.setForeground(Color.WHITE); // Set the text color to white
+        headerPanel.add(lblRegister);
+        headerPanel.setPreferredSize(new Dimension(WIDTH, 40)); // Give the header a fixed height
+        return headerPanel;
+    }
+
     private void displayImage(String imagePath) {
         getContentPane().removeAll();
         setLayout(new BorderLayout());
 
         // Add the header and navigation panels back
-        add(new HeaderPanel("Explore"), BorderLayout.NORTH);
+        add(createHeaderPanel(), BorderLayout.NORTH);
         add(new NavigationPanel(this), BorderLayout.SOUTH);
 
         JPanel imageViewerPanel = new JPanel(new BorderLayout());
@@ -110,14 +128,14 @@ public class ExploreUI extends UIBase {
         String bio = "";
         String timestampString = "";
         int likes = 0;
-        Path detailsPath = Paths.get("resources/img", "image_details.txt");
-        try (Stream < String > lines = Files.lines(detailsPath)) {
+        Path detailsPath = Paths.get("img", "image_details.txt");
+        try (Stream<String> lines = Files.lines(detailsPath)) {
             String details = lines.filter(line -> line.contains("ImageID: " + imageId)).findFirst().orElse("");
             if (!details.isEmpty()) {
                 String[] parts = details.split(", ");
                 username = parts[1].split(": ")[1];
                 bio = parts[2].split(": ")[1];
-                System.out.println(bio + "this is where you get an error " + parts[3]);
+                System.out.println(bio+"this is where you get an error "+parts[3]);
                 timestampString = parts[3].split(": ")[1];
                 likes = Integer.parseInt(parts[4].split(": ")[1]);
             }
@@ -135,13 +153,14 @@ public class ExploreUI extends UIBase {
             timeSincePosting = days + " day" + (days != 1 ? "s" : "") + " ago";
         }
 
-        // Top panel for username and time since posting
+// Top panel for username and time since posting
         JPanel topPanel = new JPanel(new BorderLayout());
         JButton usernameLabel = new JButton(username);
         JLabel timeLabel = new JLabel(timeSincePosting);
         timeLabel.setHorizontalAlignment(JLabel.RIGHT);
         topPanel.add(usernameLabel, BorderLayout.WEST);
         topPanel.add(timeLabel, BorderLayout.EAST);
+
 
         // Prepare the image for display
         JLabel imageLabel = new JLabel();
@@ -168,7 +187,7 @@ public class ExploreUI extends UIBase {
         add(bottomPanel, BorderLayout.SOUTH);
 
         // Re-add the header and navigation panels
-        add(new HeaderPanel("Explore"), BorderLayout.NORTH);
+        add(createHeaderPanel(), BorderLayout.NORTH);
         add(new NavigationPanel(this), BorderLayout.SOUTH);
 
         // Panel for the back button
@@ -176,13 +195,13 @@ public class ExploreUI extends UIBase {
         JButton backButton = new JButton("Back");
 
         // Make the button take up the full width
-        backButton.setPreferredSize(new Dimension(WIDTH - 20, backButton.getPreferredSize().height));
+        backButton.setPreferredSize(new Dimension(WIDTH-20, backButton.getPreferredSize().height));
 
         backButtonPanel.add(backButton);
 
         backButton.addActionListener(e -> {
             getContentPane().removeAll();
-            add(new HeaderPanel("Explore"), BorderLayout.NORTH);
+            add(createHeaderPanel(), BorderLayout.NORTH);
             add(createMainContentPanel(), BorderLayout.CENTER);
             add(new NavigationPanel(this), BorderLayout.SOUTH);
             revalidate();
@@ -191,10 +210,7 @@ public class ExploreUI extends UIBase {
         final String finalUsername = username;
 
         usernameLabel.addActionListener(e -> {
-            User user = new User(finalUsername); // Assuming User class has a constructor that takes a username
-            ProfileUI profileUI = new ProfileUI(user.getUsername());
-            profileUI.setVisible(true);
-            dispose(); // Close the current frame
+            NavigationController.getInstance().navigate(this, new ProfileUI(finalUsername));
         });
 
         // Container panel for image and details
@@ -211,4 +227,5 @@ public class ExploreUI extends UIBase {
         revalidate();
         repaint();
     }
+
 }
