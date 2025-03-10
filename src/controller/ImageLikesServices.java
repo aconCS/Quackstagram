@@ -8,8 +8,10 @@ public class ImageLikesServices {
 
     private final String likesFilePath = "resources/data/likes.txt";
 
+    public ImageLikesServices(){ ensureFileExists(); }
+
     // Method to like an image
-    public void likeImage(String username, String imageID) throws IOException {
+    public boolean likeImage(String username, String imageID) throws IOException {
         Map<String, Set<String>> likesMap = readLikes();
         if (!likesMap.containsKey(imageID)) {
             likesMap.put(imageID, new HashSet<>());
@@ -17,7 +19,9 @@ public class ImageLikesServices {
         Set<String> users = likesMap.get(imageID);
         if (users.add(username)) { // Only add and save if the user hasn't already liked the image
             saveLikes(likesMap);
+            return true;
         }
+        return false;
     }
 
     // Method to read likes from file
@@ -42,6 +46,20 @@ public class ImageLikesServices {
                 String line = entry.getKey() + ":" + String.join(",", entry.getValue());
                 writer.write(line);
                 writer.newLine();
+            }
+            writer.flush();
+        }
+    }
+
+    // Method to ensure the likes file exists
+    private void ensureFileExists() {
+        File file = new File(likesFilePath);
+        if (!file.exists()) {
+            try {
+                file.getParentFile().mkdirs(); // Create directories if they do not exist
+                file.createNewFile(); // Create the file if it does not exist
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

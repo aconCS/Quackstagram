@@ -1,3 +1,8 @@
-1:1
 1:Lorin
 1:Xylo
+Raistlin0905:1
+Raistlin0905:Zara
+1:Raistlin0905
+Raist0905:1
+Raist0905:Zara
+Raist0905:Mystar

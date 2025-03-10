@@ -80,7 +80,7 @@ public class ProfileHeader extends JPanel {
         profileNameLabel.setFont(new Font("Arial", Font.BOLD, 14));
         profileNameLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Padding on the sides
 
-        JTextArea profileBio = new JTextArea(username);
+        JTextArea profileBio = new JTextArea(userController.getBio());
         System.out.println("This is the bio " + username);
         profileBio.setEditable(false);
         profileBio.setFont(new Font("Arial", Font.PLAIN, 12));

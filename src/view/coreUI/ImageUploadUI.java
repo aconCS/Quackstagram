@@ -177,7 +177,7 @@ public class ImageUploadUI extends UIBase {
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         try (BufferedWriter writer = Files.newBufferedWriter(infoFilePath, StandardOpenOption.APPEND)) {
-            writer.write(String.format("ImageID: %s, Username: %s, Caption: %s, Timestamp: %s, Likes: 0", imageId, username, caption, timestamp));
+            writer.write(String.format("ImageID: %s, Username: %s, Caption: %s, Timestamp: %s, Likes: 0, Comments: ", imageId, username, caption, timestamp));
             writer.newLine();
         }
 
