@@ -1,6 +1,7 @@
 package view.coreUI;
 
 import controller.UserController;
+import services.FileServices;
 import view.Components.HeaderPanel;
 import view.Components.NavigationPanel;
 import view.Components.UIBase;
@@ -56,9 +57,9 @@ public class NotificationsUI extends UIBase {
                     // Add profile icon (if available) and timestamp
                     JLabel profileIcon = new JLabel(new ImageIcon("resources/img/storage/profile/" + userWhoLiked + ".png"));
 
-                    String timestampMessage = getElapsedTime(timestamp);
+                    String timestampMessage = FileServices.getElapsedTime(timestamp);
                     if(!timestampMessage.equals("Just now")) {
-                        timestampMessage = getElapsedTime(timestamp) + " ago";
+                        timestampMessage = FileServices.getElapsedTime(timestamp) + " ago";
                     }
 
                     JLabel timestampLabel = new JLabel(timestampMessage);
@@ -81,29 +82,4 @@ public class NotificationsUI extends UIBase {
         add(navigationPanel, BorderLayout.SOUTH);
 
     }
-
-    private String getElapsedTime(String timestamp) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime timeOfNotification = LocalDateTime.parse(timestamp, formatter);
-        LocalDateTime currentTime = LocalDateTime.now();
-
-        long daysBetween = ChronoUnit.DAYS.between(timeOfNotification, currentTime);
-        long minutesBetween = ChronoUnit.MINUTES.between(timeOfNotification, currentTime) % 60;
-
-        StringBuilder timeElapsed = new StringBuilder();
-        if (daysBetween > 0) {
-            timeElapsed.append(daysBetween).append(" day").append(daysBetween > 1 ? "s" : "");
-        }
-        if (minutesBetween > 0) {
-            if (daysBetween > 0) {
-                timeElapsed.append(" and ");
-            }
-            timeElapsed.append(minutesBetween).append(" minute").append(minutesBetween > 1 ? "s" : "");
-        } else {
-            timeElapsed.append("Just now");
-        }
-
-        return timeElapsed.toString();
-    }
-
 }
