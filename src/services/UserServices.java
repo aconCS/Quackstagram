@@ -25,14 +25,18 @@ public class UserServices{
     }
 
     public void initializeUserData(){
-        user.setBio(loadBioData(username));
+        setBio(loadBioData(username));
         user.setFollowersCount(loadFollowerCount(username));
         user.setFollowingCount(loadFollowingCount(username));
         user.setPostCount(loadPostCount(username));
         user.setPosts(loadUserPosts(username));
 
-        System.out.println("Bio for " + user.getUsername() + ": " + user.getBio());
-        System.out.println("Number of posts for this user: " + user.getPostsCount());
+        System.out.println(user.getUsername() + "'s bio: " + user.getBio());
+        System.out.println("Post count: " + user.getPostsCount());
+    }
+
+    public void setBio(String bio){
+        user.setBio(bio);
     }
 
     public boolean isFollowing(String currentUser, String loggedInUser)  {
@@ -56,6 +60,10 @@ public class UserServices{
 
         return postPaths;
     }
+
+    public void deleteOldProfilePicture() throws IOException { userRepository.deleteOldProfilePicture(); }
+
+    public void changeBioData(String bio) throws IOException { userRepository.changeBioData(bio); }
 
     public void followUser(String follower, String followed) { userRepository.writeFollowData(follower, followed); }
 

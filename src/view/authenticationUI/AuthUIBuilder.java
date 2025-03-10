@@ -40,12 +40,16 @@ public class AuthUIBuilder{
         return this;
     }
 
+    public AuthUIBuilder addHeaderPanel(String title){
+        JPanel headerPanel = new HeaderPanel(title);
+        frame.add(headerPanel, BorderLayout.NORTH);
+        return this;
+    }
+
     /*
     * Builds the general UI structure for the authentication screens (shared by SignInUI and SignUpUI).
     * */
     public void buildUI() {
-        // Create headerPanel
-        JPanel headerPanel = new HeaderPanel("Quackstagram - Login");
 
         // Create bodyPanel to hold logo and fieldPanels
         JPanel bodyPanel = new JPanel(new GridBagLayout());
@@ -82,7 +86,6 @@ public class AuthUIBuilder{
         }
 
         // Add panels to the root frame
-        frame.add(headerPanel, BorderLayout.NORTH);
         frame.add(bodyPanel, BorderLayout.CENTER);
         frame.add(buttonPanel, BorderLayout.SOUTH);
     }

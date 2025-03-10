@@ -11,8 +11,8 @@ public class CommentPanel extends JPanel{
 
     private final PostController postController;
 
-    public CommentPanel(String imageId) {
-        this.postController = new PostController(imageId);
+    public CommentPanel(PostController postController) {
+        this.postController = postController;
 
         setLayout(new BorderLayout());
         buildCommentsPanel();
@@ -63,7 +63,7 @@ public class CommentPanel extends JPanel{
         JScrollPane scrollPane = new JScrollPane(commentsPanel);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(1000, 100)); // Set preferred size for the scroll pane
+        scrollPane.setPreferredSize(new Dimension(1000, 150)); // Set preferred size for the scroll pane
 
         add(scrollPane, BorderLayout.CENTER);
     }

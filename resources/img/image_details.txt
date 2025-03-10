@@ -6,6 +6,8 @@ ImageID: Zara_1, Username: Zara, Caption: Lost my map I have. Oops., Timestamp: 
 ImageID: Zara_2, Username: Zara, Caption: Yoga with Yoda, Timestamp: 2023-12-17 19:25:03, Likes: 12
 ImageID: Mystar_1, Username: Mystar, Caption: Cookies gone?, Timestamp: 2023-12-17 19:26:50, Likes: 2
 ImageID: Mystar_2, Username: Mystar, Caption: In my soup a fly is., Timestamp: 2023-12-17 19:27:24, Likes: 2
-ImageID: Raistlin0905_1, Username: Raistlin0905, Caption: Enter a caption, Timestamp: 2025-03-09 16:37:34, Likes: 0
 ImageID: 1_1, Username: 1, Caption: Enter a caption, Timestamp: 2025-03-10 02:31:17, Likes: 9
-ImageID: Raist0905_1, Username: Raist0905, Caption: This is my first post!, Timestamp: 2025-03-10 07:17:22, Likes: 0
+ImageID: 1_2, Username: 1, Caption: This is the bio for my cool picture hehehehe, Timestamp: 2025-03-10 21:12:54, Likes: 0, Comments: 
+ImageID: 1_3, Username: 1, Caption: third post, Timestamp: 2025-03-10 22:59:23, Likes: 0, Comments: 
+ImageID: username_1, Username: username, Caption: this is my insanely cool caption, Timestamp: 2025-03-10 23:55:07, Likes: 0, Comments: 
+ImageID: username_2, Username: username, Caption: this is another cool caption, Timestamp: 2025-03-10 23:55:41, Likes: 0, Comments: 

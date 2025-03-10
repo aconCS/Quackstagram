@@ -78,6 +78,7 @@ public class AuthServices {
         try {
             BufferedImage image = ImageIO.read(file);
             File outputFile = new File(profilePhotoStoragePath + username + ".png");
+            System.out.println(outputFile.getAbsolutePath());
             ImageIO.write(image, "png", outputFile);
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,11 +88,13 @@ public class AuthServices {
     /*
     * Saves the profile picture of the user with the entered username once a non-null file is chosen.
     * */
-    public void uploadProfilePicture(String username) {
+    public boolean uploadProfilePicture(String username) {
         FileServices fileServices = new FileServices();
         File chosenFile = fileServices.openFileChooser("Upload Profile Picture", "jpg", "jpeg", "png");
         if(chosenFile != null) {
             saveProfilePicture(chosenFile, username);
+            return true;
         }
+        return false;
     }
 }

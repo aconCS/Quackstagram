@@ -24,6 +24,7 @@ public class SignInUI extends UIBase {
         passwordField = new JPasswordField();
 
         new AuthUIBuilder(this)
+                .addHeaderPanel("Sign in")
                 .addTextFieldPanel("Username", usernameField)
                 .addTextFieldPanel("Password", passwordField)
                 .addButton("Sign in", this::onSignInClicked)

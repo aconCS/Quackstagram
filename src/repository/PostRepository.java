@@ -20,66 +20,48 @@ public class PostRepository {
     }
 
     public void writeCommentToPost(String imageId, String comment) {
-        Path commentsPath = Paths.get("resources/data/", "comments/");
+        Path commentsPath = Paths.get("resources/data/comments");
         String username = userController.getLoggedInUsername();
-
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        // Load images from the uploaded folder
-        File commentDir = new File("resources/data/comments");
-        if (commentDir.exists() && commentDir.isDirectory()) {
-            File[] commentFiles = commentDir.listFiles((dir, name) -> name.matches(imageId + "_.*\\.txt"));
-            if (commentFiles != null && commentFiles.length > 0) {
-                File commentFile = commentFiles[0]; // Assuming there's only one file per imageId
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(commentFile, true))) {
-                    writer.write(username + ": " + comment + ": " + timestamp);
-                    writer.newLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                // If no comment file exists for the imageId, create a new one
-                File newCommentFile = new File(commentsPath.toString(), imageId + "_comments.txt");
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(newCommentFile))) {
-                    writer.write(username + ": " + comment);
-                    writer.newLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        // Create file if it doesnt exist
+        File commentFile = new File(commentsPath.toFile(), imageId + "_comments.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(commentFile, true))) {
+            writer.write(username + ": " + comment + ": " + timestamp);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     public ArrayList<String[]> loadCommentsForPost(String imageId) {
         ArrayList<String[]> comments = new ArrayList<>();
-
         File commentDir = new File("resources/data/comments");
-        if (commentDir.exists() && commentDir.isDirectory()) {
-            File[] commentFiles = commentDir.listFiles((dir, name) -> name.matches(imageId + "_.*\\.txt"));
-            if (commentFiles != null && commentFiles.length > 0) {
-                File commentFile = commentFiles[0]; // Assuming there's only one file per imageId
-                try (BufferedReader reader = new BufferedReader(new FileReader(commentFile))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        String[] parts = line.split(": ", 3);
-                        if (parts.length == 3) {
-                            String[] comment = new String[]{parts[0], parts[1], parts[2]};
-                            comments.add(comment);
-                        }
+        File commentFile = new File(commentDir, imageId + "_comments.txt");
+
+        if (commentFile.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(commentFile))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(": ", 3);
+                    if (parts.length == 3) {
+                        // Add comment data (username, comment, timestamp)
+                        comments.add(new String[]{parts[0], parts[1], parts[2]});
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
+
         return comments;
     }
+
 
     public void writeLikeToPost(String imageId) {
         String username = userController.getLoggedInUsername();
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        // Load images from the uploaded folder*
         File likeDir = new File("resources/data/likes");
         File[] likeFiles = likeDir.listFiles((dir, name) -> name.matches(imageId + "_.*\\.txt"));
         if (likeFiles != null && likeFiles.length > 0) {
@@ -161,17 +143,34 @@ public class PostRepository {
         }
     }
 
-    public void writeNotification(String imageId){
-        // Record the like in notifications.txt
+    public void writeNotification(String imageId, String type){
+        // Record the action in notifications.txt
         String currentUser = userController.getLoggedInUsername();
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String imageOwner = imageId.split("_")[0];
 
-        String notification = String.format("%s; %s; %s; %s\n", imageOwner, currentUser, imageId, timestamp);
+        String notification = String.format("%s; %s; %s; %s; %s \n", imageOwner, currentUser, imageId, timestamp, type);
         try (BufferedWriter notificationWriter = Files.newBufferedWriter(Paths.get("resources/data", "notifications.txt"), StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
             notificationWriter.write(notification);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String readPostCaption(String imageId){
+        String caption = "";
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get("resources/img", "image_details.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(", ");
+                if (parts[0].split(": ")[1].equals(imageId)) {
+                    caption = parts[2].split(": ")[1];
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return caption;
     }
 }

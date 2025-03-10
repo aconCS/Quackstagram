@@ -22,6 +22,7 @@ public class SignUpUI extends UIBase {
         bioField = new JTextField();
 
         new AuthUIBuilder(this)
+                .addHeaderPanel("Register")
                 .addTextFieldPanel("Username", usernameField)
                 .addTextFieldPanel("Password", passwordField)
                 .addTextFieldPanel("Bio", bioField)
@@ -46,9 +47,15 @@ public class SignUpUI extends UIBase {
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         } else {
-            authController.saveCredentials(username, password, bio);
-            authController.uploadProfilePicture(username);
-            NavigationController.getInstance().navigate(this, new SignInUI());
+            if(authController.saveCredentials(username, password, bio)){
+                authController.uploadProfilePicture(username);
+                NavigationController.getInstance().navigate(this, new SignInUI());
+            }else{
+                JOptionPane.showMessageDialog(this,
+                        "Username/Password is too short",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 

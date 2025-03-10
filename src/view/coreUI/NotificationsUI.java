@@ -42,17 +42,32 @@ public class NotificationsUI extends UIBase {
                 String[] parts = line.split(";");
                 if (parts[0].trim().equals(userController.getLoggedInUsername())) {
                     // Format the notification message
-                    String userWhoLiked = parts[1].trim();
+                    String userWhoInteracted = parts[1].trim();
                     String imageId = parts[2].trim();
                     String timestamp = parts[3].trim();
-                    String notificationMessage = userWhoLiked + " liked your picture";
+                    String type = parts[4].trim();
+
+                    String notificationMessage;
+                    switch (type) {
+                        case "like":
+                           notificationMessage = userWhoInteracted + " liked your post";
+                           break;
+                        case "comment":
+                            notificationMessage = userWhoInteracted + " commented on your post";
+                            break;
+                        default:
+                            notificationMessage = userWhoInteracted + " interacted with your post";
+                            break;
+                    }
 
                     // Add the notification to the panel
                     JPanel notificationPanel = new JPanel(new BorderLayout());
                     notificationPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
                     // Add profile icon (if available) and timestamp
-                    JLabel profileIcon = new JLabel(new ImageIcon("resources/img/storage/profile/" + userWhoLiked + ".png"));
+                    ImageIcon profileIcon = new ImageIcon("resources/img/storage/profile/" + userWhoInteracted + ".png");
+                    profileIcon.setImage(profileIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+                    JLabel scaledIcon = new JLabel(profileIcon);
 
                     String timestampMessage = FileServices.getElapsedTimestamp(timestamp);
                     if(!timestampMessage.equals("Just now")) {
@@ -60,11 +75,12 @@ public class NotificationsUI extends UIBase {
                     }
 
                     JLabel timestampLabel = new JLabel(timestampMessage);
-
-                    notificationPanel.add(profileIcon, BorderLayout.WEST);
+                    timestampLabel.setFont(new Font("Arial", Font.PLAIN, 10));
+                    notificationPanel.add(scaledIcon, BorderLayout.WEST);
                     notificationPanel.add(timestampLabel, BorderLayout.EAST);
 
                     JLabel notificationLabel = new JLabel(notificationMessage);
+                    notificationLabel.setFont(new Font("Arial", Font.BOLD, 12));
                     notificationPanel.add(notificationLabel, BorderLayout.CENTER);
 
                     contentPanel.add(notificationPanel);

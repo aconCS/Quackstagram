@@ -44,8 +44,20 @@ public class PostServices {
         return postRepository.isAlreadyLiked(imageId, userController.getLoggedInUsername());
     }
 
-    public void setNotification(String imageId){
-        postRepository.writeNotification(imageId);
+    public void setNotification(String imageId, String type){
+        postRepository.writeNotification(imageId, type);
     }
 
+    public String getImageOwner(String imageId){
+        String[] parts = imageId.split("_");
+        return parts[0];
+    }
+
+    public String getImagePath(String imageId){
+        return "resources/img/uploaded/" + imageId + ".png";
+    }
+
+    public String getPostCaption(String imageId){
+        return postRepository.readPostCaption(imageId);
+    }
 }

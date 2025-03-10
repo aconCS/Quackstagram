@@ -1,6 +1,8 @@
 package view.Components;
 
+import controller.NavigationController;
 import controller.UserController;
+import view.coreUI.EditProfileUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +24,6 @@ public class ProfileHeader extends JPanel {
     }
 
     private void refresh() {
-        System.out.println("REFRESHING PROFILE HEADER");
         int postCount = userController.getPostCount();
         int followerCount = userController.getFollowerCount();
         int followingCount = userController.getFollowingCount();
@@ -100,10 +101,9 @@ public class ProfileHeader extends JPanel {
         return label;
     }
 
-    // TODO MAKE HEADER UPDATE WHEN ACTION IS PRESSED
-    // TODO FIGURE THIS OUT AFTER profileUI optimization is Done
     private JButton createProfileButton(boolean isCurrentUser, String loggedInUsername) {
-        JButton profileButton = new JButton("Edit Profile");
+        JButton profileButton = new JButton("null");
+
         if (!isCurrentUser) {
             String buttonText = userController.isFollowing(loggedInUsername, username) ? "Unfollow" : "Follow";
             profileButton.setText(buttonText);
@@ -118,6 +118,12 @@ public class ProfileHeader extends JPanel {
                     refresh();
                 }
             });
+        }else{
+            profileButton.setText("Edit Profile");
+            profileButton.addActionListener(e -> {
+                JFrame currFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                NavigationController.getInstance().navigate(currFrame, new EditProfileUI(userController));
+            });
         }
 
         profileButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -128,6 +134,7 @@ public class ProfileHeader extends JPanel {
         profileButton.setOpaque(true);
         profileButton.setBorderPainted(false);
         profileButton.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0)); // Add some vertical padding
+
         return profileButton;
     }
 }

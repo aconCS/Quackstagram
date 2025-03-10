@@ -159,6 +159,45 @@ public class UserRepository {
         return bio;
     }
 
+    public void deleteOldProfilePicture() throws IOException {
+        String profilePicPaths = "resources/img/storage/profile/";
+        File oldPicture = new File(profilePicPaths + readLoggedInUsername() + ".png");
+        if (!oldPicture.delete()) {
+            System.out.println("Could not delete file");
+        }
+
+    }
+
+    public void changeBioData(String newBio) throws IOException {
+        String detailsPath = "resources/data/credentials.txt";
+
+        File file = new File(detailsPath);
+        File temp = new File("resources/data/temp.txt");
+        String loggedInUsername = readLoggedInUsername();
+        PrintWriter out = new PrintWriter(new FileWriter(temp));
+
+        Files.lines(file.toPath())
+                .forEach(line -> {
+                    String[] parts = line.split(":");
+                    if (parts[0].equals(loggedInUsername)) {
+                        parts[2] = newBio;
+                        out.println(String.join(":", parts));
+                    } else {
+                        out.println(line);
+                    }
+                });
+        out.flush();
+        out.close();
+
+        if (!file.delete()) {
+            System.out.println("Could not delete file");
+            return;
+        }
+        if (!temp.renameTo(file)) {
+            System.out.println("Could not rename file");
+        }
+    }
+
     public List<Post> readUserPosts(String currUsername){
         List<Post> posts = new ArrayList<>();
 

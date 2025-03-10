@@ -14,7 +14,10 @@ public class PostController {
         this.imageId = imageId;
     }
 
-    public void addCommentToPost(String comment) { postServices.addCommentToPost(imageId, comment); }
+    public void addCommentToPost(String comment) {
+        postServices.addCommentToPost(imageId, comment);
+        postServices.setNotification(imageId, "comment");
+    }
 
     public ArrayList<String[]> getCommentsForPost() { return postServices.getCommentsForPost(imageId); }
 
@@ -23,11 +26,19 @@ public class PostController {
     public void likeAction() {
         if(postServices.isPostLiked(imageId)){
             postServices.removeLikeFromPost(imageId);
-            postServices.setNotification(imageId);
+            postServices.setNotification(imageId, "like");
         } else {
             postServices.addLikeToPost(imageId);
         }
     }
 
+    public String getImageOwner() { return postServices.getImageOwner(imageId); }
+
+    public String getImageId() { return imageId; }
+
     public boolean isPostLiked() { return postServices.isPostLiked(imageId); }
+
+    public String getImagePath() { return postServices.getImagePath(imageId); }
+
+    public String getPostCaption() { return postServices.getPostCaption(imageId); }
 }

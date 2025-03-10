@@ -1,11 +1,16 @@
 package services;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 
 public class FileServices {
 
@@ -45,5 +50,44 @@ public class FileServices {
         }
 
         return timeElapsed.toString();
+    }
+
+    public static ImageIcon createScaledIcon(String path, int width, int height) {
+        ImageIcon imageIcon;
+        try {
+            BufferedImage originalImage = ImageIO.read(new File(path));
+            if (originalImage == null) {
+                System.out.println("Image not found at path: " + path);
+                return null;
+            }
+
+            Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            BufferedImage bufferedScaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedScaledImage.createGraphics();
+            g2d.drawImage(scaledImage, 0, 0, null);
+            g2d.dispose();
+
+            BufferedImage croppedImage = bufferedScaledImage.getSubimage(0, 0, Math.min(bufferedScaledImage.getWidth(), width), Math.min(bufferedScaledImage.getHeight(), height));
+            imageIcon = new ImageIcon(croppedImage);
+        } catch (IOException ex) {
+            System.out.println("Error reading image: " + ex.getMessage());
+            return null;
+        }
+        return imageIcon;
+    }
+
+    public static ArrayList<String> getAllImageIds() {
+        ArrayList<String> imageIDs = new ArrayList<>();
+        File folder = new File("resources/img/uploaded/");
+        if (folder.exists() && folder.isDirectory()) {
+            File[] files = folder.listFiles((dir, name) -> name.endsWith(".png"));
+            if (files != null) {
+                for (File file : files) {
+                    String fileName = file.getName();
+                    imageIDs.add(fileName.split("\\.")[0]);
+                }
+            }
+        }
+        return imageIDs;
     }
 }
