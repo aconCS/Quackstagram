@@ -1,10 +1,9 @@
 package view.coreUI;
 
 import controller.ImageLikesServices;
+import controller.PostController;
 import controller.UserController;
-import view.Components.HeaderPanel;
-import view.Components.NavigationPanel;
-import view.Components.UIBase;
+import view.Components.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,20 +16,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
 
 public class HomeUI extends UIBase {
     private final int WIDTH = this.getWidth();
@@ -39,7 +28,6 @@ public class HomeUI extends UIBase {
     private final int IMAGE_WIDTH = WIDTH - 100; // Width for the image posts
     private static final int IMAGE_HEIGHT = 150; // Height for the image posts
 
-    private static final Color LIKE_BUTTON_COLOR = new Color(255, 90, 95); // Color for the like button
     private static final Color COMENT_BUTTON_COLOR = new Color(0, 200, 200); // Color for the like button
     private final CardLayout cardLayout;
     private final JPanel cardPanel;
@@ -47,6 +35,8 @@ public class HomeUI extends UIBase {
     private final JPanel imageViewPanel;
     private final UserController userController;
     private final ImageLikesServices imageLikesService;
+    private PostController postController;
+    private CommentPanel commentPanel;
 
     public HomeUI() {
         setTitle("Quakstagram Home");
@@ -105,30 +95,24 @@ public class HomeUI extends UIBase {
             imageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
             imageLabel.setPreferredSize(new Dimension(IMAGE_WIDTH, IMAGE_HEIGHT));
             imageLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Add border to image label
-            String imageId = new File(postData[3]).getName().split("\\.")[0];
-            try {
-                BufferedImage originalImage = ImageIO.read(new File(postData[3]));
-                BufferedImage croppedImage = originalImage.getSubimage(0, 0, Math.min(originalImage.getWidth(), IMAGE_WIDTH), Math.min(originalImage.getHeight(), IMAGE_HEIGHT));
-                ImageIcon imageIcon = new ImageIcon(croppedImage);
+            ImageIcon imageIcon = createScaledIcon(postData[3], IMAGE_WIDTH, IMAGE_HEIGHT);
+            if (imageIcon != null) {
                 imageLabel.setIcon(imageIcon);
-            } catch (IOException ex) {
-                // Handle exception: Image file not found or reading error
+            }else{
                 imageLabel.setText("Image not found");
             }
 
             JLabel descriptionLabel = new JLabel(postData[1]);
             descriptionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-            JLabel likesLabel = new JLabel(postData[2]);
-            likesLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-            JButton likeButton = createLikeButton(postData, imageId, likesLabel);
+            String imageId = new File(postData[3]).getName().split("\\.")[0];
+            postController = new PostController(imageId);
+            JPanel likePanel = new LikeButton(postController);
 
             itemPanel.add(nameLabel);
             itemPanel.add(imageLabel);
             itemPanel.add(descriptionLabel);
-            itemPanel.add(likesLabel);
-            itemPanel.add(likeButton);
+            itemPanel.add(likePanel);
 
             panel.add(itemPanel);
 
@@ -148,63 +132,12 @@ public class HomeUI extends UIBase {
         }
     }
 
-    private void handleLikeAction(String imageId, JLabel likesLabel) {
-        Path detailsPath = Paths.get("resources/img", "image_details.txt");
-        StringBuilder newContent = new StringBuilder();
-        boolean updated = false;
-        String currentUser = userController.getLoggedInUsername();
-        String imageOwner = "";
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        // Read and update image_details.txt
-        try (BufferedReader reader = Files.newBufferedReader(detailsPath)) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.contains("ImageID: " + imageId)) {
-                    String[] parts = line.split(", ");
-                    imageOwner = parts[1].split(": ")[1];
-                    int likes = Integer.parseInt(parts[4].split(": ")[1]);
-                    likes++; // Increment the likes count
-                    parts[4] = "Likes: " + likes;
-                    line = String.join(", ", parts);
-
-                    // Update the UI
-                    likesLabel.setText("Likes: " + likes);
-                    updated = true;
-                }
-                newContent.append(line).append("\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Write updated likes back to image_details.txt
-        if (updated) {
-            try (BufferedWriter writer = Files.newBufferedWriter(detailsPath)) {
-                writer.write(newContent.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            // Record the like in notifications.txt
-            String notification = String.format("%s; %s; %s; %s\n", imageOwner, currentUser, imageId, timestamp);
-            try (BufferedWriter notificationWriter = Files.newBufferedWriter(Paths.get("resources/data", "notifications.txt"), StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
-                notificationWriter.write(notification);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        /*try {
-            imageLikesService.likeImage(userController.getLoggedInUsername(), imageId);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }*/
-    }
 
     private String[][] createSampleData() {
         String currentUser = userController.getLoggedInUsername();
 
-        ArrayList<String> followedUsers = new ArrayList<String>();
+        ArrayList<String> followedUsers = new ArrayList<>();
         try (BufferedReader reader = Files.newBufferedReader(Paths.get("resources/data", "following.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -251,52 +184,44 @@ public class HomeUI extends UIBase {
 
     private void displayImage(String[] postData) {
         imageViewPanel.removeAll(); // Clear previous content
-
         String imageId = new File(postData[3]).getName().split("\\.")[0];
-        JLabel likesLabel = new JLabel(postData[2]); // Update this line
+        postController = new PostController(imageId);
+        commentPanel = new CommentPanel(imageId);
 
         // Display the image
         JLabel fullSizeImageLabel = new JLabel();
         fullSizeImageLabel.setHorizontalAlignment(JLabel.CENTER);
+        fullSizeImageLabel.setIcon(createScaledIcon(postData[3], WIDTH, HEIGHT));
 
-        try {
-            BufferedImage originalImage = ImageIO.read(new File(postData[3]));
-            BufferedImage croppedImage = originalImage.getSubimage(0, 0, Math.min(originalImage.getWidth(), WIDTH - 20), Math.min(originalImage.getHeight(), HEIGHT - 40));
-            ImageIcon imageIcon = new ImageIcon(croppedImage);
-            fullSizeImageLabel.setIcon(imageIcon);
-        } catch (IOException ex) {
-            // Handle exception: Image file not found or reading error
-            fullSizeImageLabel.setText("Image not found");
-        }
-
-        //User Info
+        // User Info
         JPanel userPanel = new JPanel();
         userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.Y_AXIS));
         JLabel userName = new JLabel(postData[0]);
         userName.setFont(new Font("Arial", Font.BOLD, 18));
-        userPanel.add(userName); //User Name
+        userPanel.add(userName); // User Name
 
         // Button panel and buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton likeButton = createLikeButton(postData, imageId, likesLabel);
-        JButton commentButton = createCommentButton(postData, imageId);
+        JPanel likeButton = new LikeButton(postController);
+        JButton commentButton = createCommentButton(imageId);
         buttonPanel.add(likeButton);
         buttonPanel.add(commentButton);
-        buttonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         // Information panel at the bottom
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.add(new JLabel(postData[1])); // Description
-        //infoPanel.add(new JLabel(postData[2])); // Likes
-        infoPanel.add(likesLabel);
+        JLabel caption = new JLabel(postData[1]);
+        infoPanel.add(caption); // Description
         infoPanel.add(buttonPanel);
-        //infoPanel.add(likeButton);
-        //infoPanel.add(commentButton);
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new BorderLayout());
+        bottomPanel.add(infoPanel, BorderLayout.NORTH);
+        bottomPanel.add(commentPanel, BorderLayout.CENTER);
 
         imageViewPanel.add(fullSizeImageLabel, BorderLayout.CENTER);
-        imageViewPanel.add(infoPanel, BorderLayout.SOUTH);
         imageViewPanel.add(userPanel, BorderLayout.NORTH);
+        imageViewPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         imageViewPanel.revalidate();
         imageViewPanel.repaint();
@@ -304,7 +229,27 @@ public class HomeUI extends UIBase {
         cardLayout.show(cardPanel, "ImageView"); // Switch to the image view
     }
 
-    private JButton createCommentButton(String[] postData, String imageId) {
+    private ImageIcon createScaledIcon(String path, int width, int height) {
+        ImageIcon imageIcon;
+        try {
+            BufferedImage originalImage = ImageIO.read(new File(path));
+            Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+
+            BufferedImage bufferedScaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedScaledImage.createGraphics();
+            g2d.drawImage(scaledImage, 0, 0, null);
+            g2d.dispose();
+
+            BufferedImage croppedImage = bufferedScaledImage.getSubimage(0, 0, Math.min(bufferedScaledImage.getWidth(), width), Math.min(bufferedScaledImage.getHeight(), height - 20));
+             imageIcon = new ImageIcon(croppedImage);
+        } catch (IOException ex) {
+            // Handle exception: Image file not found or reading error
+            return null;
+        }
+        return imageIcon;
+    }
+
+    private JButton createCommentButton(String imageId) {
         JButton commentButton = new JButton("💬");
         commentButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         commentButton.setBackground(COMENT_BUTTON_COLOR); // Set the background color for the like button
@@ -313,46 +258,14 @@ public class HomeUI extends UIBase {
         commentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleCommentAction(postData, imageId);
+                handleCommentAction(imageId);
             }
         });
 
         return commentButton;
     }
 
-    private void handleCommentAction1(String[] postData, String imageId) {
-        //postObject.addComment(comment);
-        /*
-        * Opens textfield for user to enter comment, and upon submit button clicked, the comment is added to the postObject
-        * How to access the postObject from here?
-        * Need to create a userCommentPanel that has the textfield and submit button
-        * Need to create another panel that displays the comments belong to the post
-        * How to connect imageId to the postObject?
-        * Where is postData written to text file originally so the comments can be added to text file?
-        * */
-    }
 
-    private JButton createLikeButton(String[] postData, String imageId, JLabel likesLabel) {
-        JButton likeButton = new JButton("❤");
-        likeButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-        likeButton.setBackground(LIKE_BUTTON_COLOR); // Set the background color for the like button
-        likeButton.setOpaque(true);
-        likeButton.setBorderPainted(false); // Remove border
-        likeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    if(imageLikesService.likeImage(userController.getLoggedInUsername(), imageId)){
-                        handleLikeAction(imageId, likesLabel); // Update this line
-                        refreshDisplayImage(postData, imageId, likesLabel); // Refresh the view
-                    }
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
-        return likeButton;
-    }
 
     private void refreshDisplayImage(String[] postData, String imageId, JLabel likesLabel) {
         // Read updated likes count from image_details.txt
@@ -370,9 +283,10 @@ public class HomeUI extends UIBase {
             e.printStackTrace();
         }
 
+        likesLabel.setText(postData[2]);
     }
 
-    private void handleCommentAction(String[] postData, String imageId) {
+    private void handleCommentAction(String imageId) {
         // Create a dialog for user to enter comment
         JDialog commentDialog = new JDialog((Frame) null, "Add Comment", true);
         commentDialog.setLayout(new BorderLayout());
@@ -390,10 +304,12 @@ public class HomeUI extends UIBase {
                 String comment = commentField.getText();
                 if (!comment.isEmpty()) {
                     // Add comment to the post object
-                    addCommentToPost(imageId, comment);
-
+                    postController.addCommentToPost(comment);
                     // Close the dialog
                     commentDialog.dispose();
+                    // Refresh comments
+                    commentPanel.refreshCommentsPanel();
+
                 }
             }
         });
@@ -404,37 +320,6 @@ public class HomeUI extends UIBase {
         commentDialog.setVisible(true);
     }
 
-    private void addCommentToPost(String imageId, String comment) {
-        Path commentsPath = Paths.get("resources/data/", "comments.txt");
-        StringBuilder newContent = new StringBuilder();
-        boolean updated = false;
 
-        // Read and update image_details.txt
-        try (BufferedReader reader = Files.newBufferedReader(commentsPath)) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.contains("ImageID: " + imageId)) {
-                    String[] parts = line.split(", ");
-                    String comments = parts[5].split(": ")[1];
-                    comments += comment + ";;;"; // Append the new comment
-                    parts[5] = "Comments: " + comments;
-                    line = String.join(", ", parts);
-                    updated = true;
-                }
-                newContent.append(line).append("\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Write updated comments back to image_details.txt
-        if (updated) {
-            try (BufferedWriter writer = Files.newBufferedWriter(commentsPath)) {
-                writer.write(newContent.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
 }
