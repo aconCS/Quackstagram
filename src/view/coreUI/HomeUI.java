@@ -266,7 +266,6 @@ public class HomeUI extends UIBase {
     }
 
 
-
     private void refreshDisplayImage(String[] postData, String imageId, JLabel likesLabel) {
         // Read updated likes count from image_details.txt
 
