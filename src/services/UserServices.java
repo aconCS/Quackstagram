@@ -61,7 +61,15 @@ public class UserServices{
         return postPaths;
     }
 
-    public void deleteOldProfilePicture() throws IOException { userRepository.deleteOldProfilePicture(); }
+    public ArrayList<String> getAllUsers() {
+        try {
+            return userRepository.loadAllUsers();
+
+        } catch (IOException ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
 
     public void changeBioData(String bio) throws IOException { userRepository.changeBioData(bio); }
 

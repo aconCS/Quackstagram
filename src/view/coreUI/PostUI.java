@@ -69,32 +69,6 @@ public class PostUI extends UIBase {
         return imageLabel;
     }
 
-    public JPanel createUserNavPanel(){
-        JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        ImageIcon profileIcon = new ImageIcon("resources/img/storage/profile/" + postController.getImageOwner() + ".png");
-        profileIcon.setImage(profileIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        JLabel scaledIcon = new JLabel(profileIcon);
-        userPanel.add(scaledIcon); // Add profile icon
-
-        JLabel userName = new JLabel(postController.getImageOwner());
-        userName.setFont(new Font("Arial", Font.BOLD, 18));
-        userPanel.add(userName); // Add usernameLabel
-
-        // Make the image clickable
-        userPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                String imageOwner = postController.getImageOwner();
-                JFrame currFrame = (JFrame) SwingUtilities.getWindowAncestor(userPanel);
-                NavigationController.getInstance().navigate(currFrame, new ProfileUI(imageOwner)); // Call a method to switch to the image view
-            }
-        });
-
-        return userPanel;
-    }
-
-
     private JPanel createButtonsPanel() {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel likeButton = new LikeButton(postController);
@@ -109,7 +83,7 @@ public class PostUI extends UIBase {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
 
-        JPanel userNavPanel = createUserNavPanel();
+        JPanel userNavPanel = new UserNavPanel(postController);
         infoPanel.add(userNavPanel); // User navigation panel
 
         JPanel captionWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT));

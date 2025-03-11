@@ -7,6 +7,7 @@ import services.UserServices;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserController {
@@ -58,11 +59,19 @@ public class UserController {
 
     public void editBio(String bio){
         try{
-            userServices.changeBioData(bio);
-            userServices.setBio(bio);
+            if (bio.isEmpty()){
+                System.out.println("Empty bio");
+            }else{
+                userServices.changeBioData(bio);
+                userServices.setBio(bio);
+            }
         }catch (IOException ex){
             ex.printStackTrace();
         }
+    }
+
+    public ArrayList<String> getAllUsers(){
+        return userServices.getAllUsers();
     }
 
     public String getLoggedInUsername(){ return userServices.getLoggedInUsername(); }

@@ -111,7 +111,7 @@ public class UserRepository {
         List<String> followers = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(followersFilePath))) {
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null && !line.isEmpty()) {
                 String[] parts = line.split(":");
                 if (parts[1].equals(username)) {
                     followers.add(parts[0]);
@@ -176,6 +176,10 @@ public class UserRepository {
         String loggedInUsername = readLoggedInUsername();
         PrintWriter out = new PrintWriter(new FileWriter(temp));
 
+        if (!file.exists()) {
+            return;
+        }
+
         Files.lines(file.toPath())
                 .forEach(line -> {
                     String[] parts = line.split(":");
@@ -237,5 +241,21 @@ public class UserRepository {
         return posts;
     }
 
+    public ArrayList<String> loadAllUsers() throws IOException {
+        ArrayList<String> users = new ArrayList<>();
+        String userPath = "resources/data/credentials.txt";
 
+        File file = new File(userPath);
+        if (!file.exists()) {
+            System.out.println("Credentials file does not exist");
+            return users;
+        }
+
+        Files.lines(file.toPath())
+                .forEach(line -> {
+                    String[] parts = line.split(":");
+                    users.add(parts[0]);
+                });
+        return users;
+    }
 }

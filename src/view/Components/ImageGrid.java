@@ -54,13 +54,11 @@ public class ImageGrid extends JPanel{
 
         for(String imageId : imageIds){
             String username = new PostController(imageId).getImageOwner();
-            System.out.println(username);
             if(isExact && !username.equals(filter)) continue;
             if(!isExact && !username.toLowerCase().contains(filter.toLowerCase())) continue;
 
             PostController postController = new PostController(imageId);
             String imagePath = postController.getImagePath();
-            System.out.println(imagePath);
             ImageIcon imageIcon = FileServices.createScaledIcon(imagePath, imageSize, imageSize);
 
             JLabel imageLabel = new JLabel(imageIcon);
