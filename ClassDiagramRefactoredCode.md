@@ -66,9 +66,9 @@ SignInUI --> "1" AuthUIBuilder : uses
 SignInUI ..> HeaderPanel
 
 class SignInUI{
--JTextField USERNAME_FIELD$
--JTextField PASSWORD_FIELD$
--User newUser
+-AuthController final authController;
+-JTextField final usernameField;
+-JTextField final passwordField;
 +SignInUI()
 }
 
@@ -78,11 +78,10 @@ SignUpUI --> "1" AuthUIBuilder : uses
 SignUpUI ..> HeaderPanel
 
 class SignUpUI{
--JTextField USERNAME_FIELD$
--JTextField PASSWORD_FIELD$
--JTextField BIO_FIELD$
--String CREDENTIALS_FILE_PATH = "resources/data/credentials.txt"$
--String PROFILE_PHOTO_STORAGE_PATH = "resources/img/storage/profile/"$
+-AuthController final authController;
+-JTextField final usernameField;
+-JTextField final passwordField;
+-JTextField final bioField;
 +SignUpUI()
 }
 
@@ -152,7 +151,11 @@ class PostUI{
 -createInfoPanel() JPanel
 }
 
-
+ProfileUI --|> UIBase : extends
+ProfileUI --> "1" UserController : uses
+ProfileUI *-- "1" ProfileHeader : creates
+ProfileUI *-- "1" NavigationPanel : creates
+ProfileUI *-- "1" ImageGrid : creates
 
 class ProfileUI{
 -int final width = this.getWidth()
@@ -161,5 +164,14 @@ class ProfileUI{
 -String final username
 +ProfileUI(String username)
 -buildUI()
+}
+
+class EditProfileUI{
+-int PROFILE_IMAGE_SIZE = 200
+-UserController final userController
++EditProfileUI(UserController userController)
+-buildUI()
++createBodyPanel() JPanel
+
 }
 ```
