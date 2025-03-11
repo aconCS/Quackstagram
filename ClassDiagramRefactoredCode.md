@@ -123,7 +123,7 @@ class HomeUI{
 -JPanel final homePanel
 -UserController final userController
 +HomeUI()
--initializeUI()
+-buildUI()
 -populateContentPanel(JPanel panel, String[][] sampleData)
 -createSampleData() String[][]
 }
@@ -166,12 +166,29 @@ class ProfileUI{
 -buildUI()
 }
 
+EditProfileUI --|> UIBase : extends
+EditProfileUI --> "1" UserController: uses
+EditProfileUI --> "1" HeaderPanel : creates
+EditProfileUI --> "1" NavigationPanel : creates
+EditProfileUI --> NavigationController : uses
+
 class EditProfileUI{
 -int PROFILE_IMAGE_SIZE = 200
 -UserController final userController
 +EditProfileUI(UserController userController)
 -buildUI()
 +createBodyPanel() JPanel
-
++createEditPicturePanel() JPanel
++createBioPanel() JPanel
 }
+
+NotificationsUI --|> UIBase
+NotificationsUI --> UserController: uses
+NotificationsUI --> "1" HeaderPanel : creates
+NotificationsUI --> "1" NavigationPanel : creates
+
+class NotificationsUI{
+-UserController userController
++NotificationsUI()
+-build()
 ```
