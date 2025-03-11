@@ -32,6 +32,8 @@ public class ProfileHeader extends JPanel {
         statsPanel.add(createStatLabel(Integer.toString(postCount), "Posts"));
         statsPanel.add(createStatLabel(Integer.toString(followerCount), "Followers"));
         statsPanel.add(createStatLabel(Integer.toString(followingCount), "Following"));
+        statsPanel.revalidate();
+        statsPanel.repaint();
 
         revalidate();
         repaint();
