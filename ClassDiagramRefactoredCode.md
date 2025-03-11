@@ -1,26 +1,69 @@
 ```mermaid
 classDiagram
 
-namespace View{
-class SignInUI
-class SignUpUI
-class AuthUIBuilder
-class ComponentFactory
-
-class UserProfileUI
-class QuackstagramHomeUI
-class NotificationsUI
-class ExploreUI
-class PostUploadUI
+Main --> "1" SignInUI : creates
+namespace App{
+class Main { +main(String[] args)$ }
 }
 
 namespace Controller{
-class ImageLikesManager
+class AuthController
+class NavigationController
+class PostController
+class UserController
 }
 
 namespace Model{
+class Post
 class User
 }
+
+namespace Repository{
+class PostRepository
+class UserRepository
+}
+
+namespace Services{
+class AuthServices
+class FileServices
+class PostServices
+class UserServices
+}
+
+namespace View{
+%% authenticationUI
+class AuthUIBuilder
+class ComponentFactory
+class SignInUI
+class SignUpUI
+
+%% components
+class CommentButton
+class CommentPanel
+class HeaderPanel
+class ImageGrid
+class LikeButton
+class NavigationPanel
+class ProfileBody
+class ProfileHeader
+class UIBase
+class UserNavPanel
+
+%% coreUI
+class EditProfileUI
+class ExploreUI
+class HomeUI
+class ImageUploadUI
+class NotificationsUI
+class PostUI
+class ProfileUI
+class SearchUserUI
+}
+
+SignInUI --|> UIBase : extends
+SignInUI --> NavigationController : uses
+SignInUI --> "1" AuthUIBuilder : uses
+SignInUI ..> HeaderPanel
 
 class SignInUI{
 -JTextField USERNAME_FIELD$
@@ -28,6 +71,11 @@ class SignInUI{
 -User newUser
 +SignInUI()
 }
+
+SignUpUI --|> UIBase : extends
+SignUpUI --> NavigationController : uses
+SignUpUI --> "1" AuthUIBuilder : uses
+SignUpUI ..> HeaderPanel
 
 class SignUpUI{
 -JTextField USERNAME_FIELD$
@@ -37,6 +85,9 @@ class SignUpUI{
 -String PROFILE_PHOTO_STORAGE_PATH = "resources/img/storage/profile/"$
 +SignUpUI()
 }
+
+AuthUIBuilder --> ComponentFactory : uses
+AuthUIBuilder --> HeaderPanel : uses
 
 class AuthUIBuilder{
 -int WIDTH = 300$
@@ -57,4 +108,58 @@ class ComponentFactory{
 ~createLogoPanel() JPanel$
 }
 
+HomeUI --|> UIBase
+HomeUI --> "1" UserController : uses
+HomeUI *-- "1" HeaderPanel : creates
+HomeUI *-- "1" NavigationPanel : creates
+HomeUI --> "1" PostController: creates
+HomeUI *-- "0..*" LikeButton : creates
+HomeUI --> FileServices : uses
+HomeUI --> NavigationController : uses
+
+class HomeUI{
+-int final width = this.getWidth()
+-int final imageWidth = width - 100
+-int final imageHeight = imageWidth
+-JPanel final homePanel
+-UserController final userController
++HomeUI()
+-initializeUI()
+-populateContentPanel(JPanel panel, String[][] sampleData)
+-createSampleData() String[][]
+}
+
+PostUI --|> UIBase : extends
+PostUI --> "1" PostController : uses
+PostUI *-- "1" CommentPanel : creates
+PostUI *-- "1" HeaderPanel : creates
+PostUI *-- "1" NavigationPanel : creates
+PostUI --> FileServices : uses
+PostUI *-- "1" LikeButton : creates
+PostUI *-- "1" CommentButton : creates
+PostUI *-- "1" UserNavPanel : creates
+
+class PostUI{
+-int final width = this.getWidth()
+-int final imageDimension = width/2
+-PostController final postController
+-CommentPanel final commentPanel
++PostUI(PostController postController)
+-buildPostUI()
+-createBodyPanel() JPanel
+-createImageLabel() JLabel
+-createButtonsPanel() JPanel
+-createInfoPanel() JPanel
+}
+
+
+
+class ProfileUI{
+-int final width = this.getWidth()
+-int final imageSize = width / 3
+-UserController final userController
+-String final username
++ProfileUI(String username)
+-buildUI()
+}
 ```
