@@ -11,3 +11,4 @@ ImageID: 1_2, Username: 1, Caption: This is the bio for my cool picture hehehehe
 ImageID: 1_3, Username: 1, Caption: third post, Timestamp: 2025-03-10 22:59:23, Likes: 0, Comments: 
 ImageID: username_1, Username: username, Caption: this is my insanely cool caption, Timestamp: 2025-03-10 23:55:07, Likes: 0, Comments: 
 ImageID: username_2, Username: username, Caption: this is another cool caption, Timestamp: 2025-03-10 23:55:41, Likes: 0, Comments: 
+ImageID: Andreas_1, Username: Andreas, Caption: caption for the cool post i made, Timestamp: 2025-03-11 16:00:02, Likes: 0, Comments: 

@@ -4,6 +4,7 @@ import controller.AuthController;
 import controller.NavigationController;
 import model.User;
 import view.Components.UIBase;
+import view.coreUI.HomeUI;
 import view.coreUI.ProfileUI;
 
 import javax.swing.*;
@@ -41,13 +42,17 @@ public class SignInUI extends UIBase {
         String enteredUsername = usernameField.getText();
         String enteredPassword = passwordField.getText();
 
+        if(enteredUsername == null || enteredPassword == null){
+            JOptionPane.showMessageDialog(this, "Please enter a valid username/password");
+            return;
+        }
+
         System.out.println(enteredUsername + " <-> " + enteredPassword);
         if (authController.verifyCredentials(enteredUsername, enteredPassword)) {
             System.out.println("Valid Credentials");
-            // TODO TAKE USER ACCESS AWAY FROM signInUI MODEL
-            User currentUser = new User(enteredUsername, "bio", enteredPassword);
-            NavigationController.getInstance().navigate(this, new ProfileUI(enteredUsername));
+            NavigationController.getInstance().navigate(this, new HomeUI());
         } else {
+            JOptionPane.showMessageDialog(this, "Invalid credentials");
             System.out.println("Invalid Credentials");
         }
     }
