@@ -190,5 +190,6 @@ NotificationsUI --> "1" NavigationPanel : creates
 class NotificationsUI{
 -UserController userController
 +NotificationsUI()
--build()
+-buildUI()
+}
 ```
