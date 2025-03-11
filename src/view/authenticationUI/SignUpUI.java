@@ -16,6 +16,8 @@ public class SignUpUI extends UIBase {
 
     public SignUpUI() {
         setTitle( "Quackstagram - Register");
+
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         authController = new AuthController();
         usernameField = new JTextField();
         passwordField = new JPasswordField();
@@ -46,17 +48,22 @@ public class SignUpUI extends UIBase {
                     "Username already exists. Please choose a different username.",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
-        } else {
-            if(authController.saveCredentials(username, password, bio)){
-                authController.uploadProfilePicture(username);
-                NavigationController.getInstance().navigate(this, new SignInUI());
-            }else{
-                JOptionPane.showMessageDialog(this,
-                        "Username/Password is too short",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
+            return;
+        } else if (username.isEmpty()){
+            JOptionPane.showMessageDialog(this,
+                    "Username can't be empty",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        } else if(password.length() < 6){
+            JOptionPane.showMessageDialog(this,
+                    "Password is too short",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
+        authController.saveCredentials(username, password, bio);
+        authController.uploadProfilePicture(username);
+        NavigationController.getInstance().navigate(this, new SignInUI());
     }
 
     /*

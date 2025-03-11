@@ -1,23 +1,18 @@
 package view.coreUI;
 
-import controller.ImageLikesServices;
 import controller.NavigationController;
 import controller.PostController;
 import controller.UserController;
 import services.FileServices;
 import view.Components.*;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;

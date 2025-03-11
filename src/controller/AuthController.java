@@ -18,12 +18,8 @@ public class AuthController {
         return authServices.doesUsernameExist(username);
     }
 
-    public boolean saveCredentials(String username, String password, String bio) {
-        if(username.isEmpty() || password.length() < 6){
-            return false;
-        }
+    public void saveCredentials(String username, String password, String bio) {
         authServices.saveCredentials(username, password, bio);
-        return true;
     }
 
     public boolean uploadProfilePicture(String username) {

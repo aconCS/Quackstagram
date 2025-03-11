@@ -19,6 +19,7 @@ public class SignInUI extends UIBase {
     public SignInUI() {
         setTitle("Quackstagram - Sign in");
         authController = new AuthController();
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // Create fields to pass to AuthUIBuilder
         usernameField = new JTextField();
