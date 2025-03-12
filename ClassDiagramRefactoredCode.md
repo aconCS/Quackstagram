@@ -60,6 +60,8 @@ class ProfileUI
 class SearchUserUI
 }
 
+%% AUTH_UI CLASSES
+
 SignInUI --|> UIBase : extends
 SignInUI --> NavigationController : uses
 SignInUI --> "1" AuthUIBuilder : uses
@@ -106,6 +108,8 @@ class ComponentFactory{
 ~createFieldPanel(String label, JTextField textField)$
 ~createLogoPanel() JPanel$
 }
+
+%% CORE_UI CLASSES
 
 HomeUI --|> UIBase
 HomeUI --> "1" UserController : uses
@@ -245,4 +249,116 @@ class SearchUserUI{
 -buildUI()
 -createBodyPanel() JPanel
 }
+
+%% COMPONENTS CLASSES
+
+CommentButton --> "1" PostController : uses
+CommentButton --> "1" CommentPanel : uses
+CommentButton --> NavigationController : uses
+
+class CommentButton{
+-Color COMMENT_BUTTON_COLOR = new Color(175, 248, 170, 255)$
+-PostController final postController
+-boolean final navigateToPost
+-CommentPanel final commentPanel
++CommentButton(PostController postController, CommentPanel commentPanel, boolean navigateToPost)
+-refresh()
+-buildCommentButton()
+-handlePostNavigation()
+-handleCommentAction()
+}
+
+CommentPanel --> "1" PostController : uses
+CommentPanel --> FileServices : uses
+
+class CommentPanel{
+-PostController final postController
++CommentPanel(PostController postController)
+-refreshCommentsPanel()
+-buildCommentsPanel()
+}
+
+class HeaderPanel{
+-String title
++HeaderPanel()
+-buildHeaderPanel()
+}
+
+ImageGrid --> "1" PostController : creates
+ImageGrid --> NavigationController : uses
+ImageGrid --> FileServices : uses
+
+class ImageGrid{
+-int final imageSize;
+-String filter;
+-boolean final isExact;
++ImageGrid(String filter, int imageSize, boolean isExact)
++setFilter(String filter)
++refresh()
+-initializeScrollGrid()
+-createGrid() JPanel
+}
+
+LikeButton --> "1" PostController : uses
+
+class LikeButton{
+-Color  UNLIKED_BUTTON_COLOR = new Color(255, 153, 153, 255)$
+-Color  LIKED_BUTTON_COLOR =  new Color(255, 90, 95)$
+-PostController final postController
++LikeButton(PostController postController)
++refresh()
+-buildLikeButton()
+}
+
+NavigationPanel --> NavigationController : uses
+NavigationPanel --> "1" UserController : creates
+
+class NavigationPanel{
+-int NAV_ICON_SIZE = 20$
+-UserController final userController
+-JFrame final currFrame
++NavigationPanel(JFrame currFrame)
+-buildNavigationPanel()
+-createIconButton(String iconPath, String buttonType) JButton
+-openProfileUI()
+-openImageUploadUI()
+-openNotificationsUI()
+-openHomeUI()
+-openExploreUI()
+}
+
+ProfileHeader --> NavigationController : uses
+ProfileHeader --> "1" UserController : uses
+
+class ProfileHeader{
+-int PROFILE_IMAGE_SIZE = 80
+-String final username
+-UserController final userController
+-JPanel statsPanel
++ProfileHeader(String username, UserController userController)
+-refresh()
+-buildHeaderPanel()
+-createStatLabel(String number, String text) JLabel
+-createProfileButton(boolean isCurrentUser, String LoggedInUsername) JButton
+}
+
+UIBase --> NavigationController : uses
+
+class UIBase{
+-WIDTH = 400$
+-HEIGH = 600$
++UIBase()
+-onExit()
+}
+
+UserNavPanel --> NavigationController : uses
+
+class UserNavPanel{
+-String final imageOwner
++UserNavPanel(String imageOwner)
+-buildUI()
+}
+
+%% SERVICE CLASSES
+
 ```
