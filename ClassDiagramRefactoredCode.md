@@ -183,13 +183,66 @@ class EditProfileUI{
 }
 
 NotificationsUI --|> UIBase
-NotificationsUI --> UserController: uses
-NotificationsUI --> "1" HeaderPanel : creates
-NotificationsUI --> "1" NavigationPanel : creates
+NotificationsUI --> "1" UserController: uses
+NotificationsUI *-- "1" HeaderPanel : creates
+NotificationsUI *-- "1" NavigationPanel : creates
 
 class NotificationsUI{
 -UserController userController
 +NotificationsUI()
 -buildUI()
+}
+
+ImageUploadUI --|> UIBase
+ImageUploadUI --> "1" UserController : uses
+ImageUploadUI *-- "1" HeaderPanel : creates
+ImageUploadUI *-- "1" NavigationPanel : creates
+
+class ImageUploadUI{
+-int final width = this.getWidth()
+-int final height = this.getHeight()
+-JLabel imagePreviewLabel
+-JTextArea captionTextArea
+-JButton uploadButton
+-JButton saveButton
+-UserController final userController
++ImageUploadUI()
+-buildUI()
+-uploadAction(ActionEvent event)
+-getNextImageId(String username) int
+-saveImageInfo(String imageId, String username, String caption)
+-getFileExtension(File file) String
+-saveCaptionAction(ActionEvent event)
+}
+
+ExploreUI --|> UIBase
+ExploreUI *-- "1" HeaderPanel : creates
+ExploreUI *-- "1" NavigationPanel : creates
+ExploreUI *-- "1" ImageGrid : creates
+ExploreUI --> NavigationController : uses
+
+class ExploreUI{
+-int final width = this.getWidth()
+-int final imageSize = width / 3
+-ImageGrid final imageGridPanel
+-JPanel final mainContentPanel
++ExploreUI()
+-buildUI()
+-createMainContentPanel() JPanel
+-createSearchPanel() JPanel
+}
+
+SearchUserUI --|> UIBase
+SearchUserUI --> "1" UserController : uses
+SearchUserUI *-- "1" HeaderPanel : creates
+SearchUserUI *-- "1" NavigationPanel : creates
+SearchUserUI *-- "0..*" UserNavPanel: creates
+
+class SearchUserUI{
+-UserController final userController
+-String final filter
++SearchUserUI(String filter)
+-buildUI()
+-createBodyPanel() JPanel
 }
 ```
