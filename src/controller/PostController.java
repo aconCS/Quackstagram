@@ -34,8 +34,6 @@ public class PostController {
 
     public String getImageOwner() { return postServices.getImageOwner(imageId); }
 
-    public String getImageId() { return imageId; }
-
     public boolean isPostLiked() { return postServices.isPostLiked(imageId); }
 
     public String getImagePath() { return postServices.getImagePath(imageId); }

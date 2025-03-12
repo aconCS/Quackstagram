@@ -11,22 +11,22 @@ import java.awt.event.MouseEvent;
 
 public class UserNavPanel extends JPanel {
 
-    private final PostController postController;
+    private final String imageOwner;
 
-    public UserNavPanel(PostController postController) {
-        this.postController = postController;
+    public UserNavPanel(String imageOwner) {
+        this.imageOwner = imageOwner;
         setLayout(new FlowLayout(FlowLayout.LEFT));
 
         initializeUI();
     }
 
     private void initializeUI() {
-        ImageIcon profileIcon = new ImageIcon("resources/img/storage/profile/" + postController.getImageOwner() + ".png");
+        ImageIcon profileIcon = new ImageIcon("resources/img/storage/profile/" + imageOwner + ".png");
         profileIcon.setImage(profileIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         JLabel scaledIcon = new JLabel(profileIcon);
         add(scaledIcon); // Add profile icon
 
-        JLabel userName = new JLabel(postController.getImageOwner());
+        JLabel userName = new JLabel(imageOwner);
         userName.setFont(new Font("Arial", Font.BOLD, 18));
         add(userName); // Add usernameLabel
 
@@ -34,7 +34,6 @@ public class UserNavPanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                String imageOwner = postController.getImageOwner();
                 JFrame currFrame = (JFrame) SwingUtilities.getWindowAncestor(UserNavPanel.this);
                 NavigationController.getInstance().navigate(currFrame, new ProfileUI(imageOwner)); // Call a method to switch to the image view
             }

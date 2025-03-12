@@ -36,7 +36,7 @@ public class ImageUploadUI extends UIBase {
     public ImageUploadUI() {
         setTitle("Upload Image");
         userController = new UserController();
-        initializeUI();
+        buildUI();
     }
 
     /**
@@ -45,7 +45,7 @@ public class ImageUploadUI extends UIBase {
      * This method sets up the header panel, navigation panel, image preview label,
      * caption text area, upload button, and save button.
      */
-    private void initializeUI() {
+    private void buildUI() {
         JPanel headerPanel = new HeaderPanel("Upload Image");
 
         JPanel navigationPanel = new NavigationPanel(this);

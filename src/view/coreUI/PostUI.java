@@ -72,7 +72,8 @@ public class PostUI extends UIBase {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
 
-        JPanel userNavPanel = new UserNavPanel(postController);
+        String imageOwner = postController.getImageOwner();
+        JPanel userNavPanel = new UserNavPanel(imageOwner);
         infoPanel.add(userNavPanel); // User navigation panel
 
         JPanel captionWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT));
