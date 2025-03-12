@@ -1,16 +1,11 @@
-package view.Components;
+package view.components;
 
 import controller.NavigationController;
 import controller.UserController;
-import model.User;
 import view.coreUI.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class NavigationPanel extends JPanel {
 

@@ -4,7 +4,7 @@ import controller.NavigationController;
 import controller.PostController;
 import controller.UserController;
 import services.FileServices;
-import view.Components.*;
+import view.components.*;
 
 import javax.swing.*;
 
@@ -19,10 +19,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class HomeUI extends UIBase {
-    private final int WIDTH = this.getWidth();
+    private final int width = this.getWidth();
 
-    private final int IMAGE_WIDTH = WIDTH - 100; // Width for the image posts
-    private final int IMAGE_HEIGHT = IMAGE_WIDTH; // Height for the image posts
+    private final int imageWidth = width - 100; // Width for the image posts
+    private final int imageHeight = imageWidth; // Height for the image posts
 
     private final JPanel homePanel;
     private final UserController userController;
@@ -33,14 +33,14 @@ public class HomeUI extends UIBase {
         userController = new UserController();
         homePanel = new JPanel(new BorderLayout());
 
-        initializeUI();
+        buildUI();
 
         add(homePanel, BorderLayout.CENTER);
         add(new HeaderPanel("Home"), BorderLayout.NORTH);
         add(new NavigationPanel(this), BorderLayout.SOUTH);
     }
 
-    private void initializeUI() {
+    private void buildUI() {
         // Content Scroll Panel
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS)); // Vertical box layout
@@ -69,9 +69,9 @@ public class HomeUI extends UIBase {
 
             JLabel imageLabel = new JLabel();
             imageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-            imageLabel.setPreferredSize(new Dimension(IMAGE_WIDTH, IMAGE_HEIGHT));
+            imageLabel.setPreferredSize(new Dimension(imageWidth, imageHeight));
             imageLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Add border to image label
-            ImageIcon imageIcon = FileServices.createScaledIcon(postData[3], IMAGE_WIDTH, IMAGE_HEIGHT);
+            ImageIcon imageIcon = FileServices.createScaledIcon(postData[3], imageWidth, imageHeight);
             if (imageIcon != null) {
                 imageLabel.setIcon(imageIcon);
             }else{
@@ -104,7 +104,7 @@ public class HomeUI extends UIBase {
 
             // Grey spacing panel
             JPanel spacingPanel = new JPanel();
-            spacingPanel.setPreferredSize(new Dimension(WIDTH - 10, 5)); // Set the height for spacing
+            spacingPanel.setPreferredSize(new Dimension(width - 10, 5)); // Set the height for spacing
             spacingPanel.setBackground(new Color(230, 230, 230)); // Grey color for spacing
             panel.add(spacingPanel);
         }

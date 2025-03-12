@@ -2,10 +2,10 @@ package view.coreUI;
 
 import controller.PostController;
 import controller.UserController;
-import view.Components.HeaderPanel;
-import view.Components.NavigationPanel;
-import view.Components.UIBase;
-import view.Components.UserNavPanel;
+import view.components.HeaderPanel;
+import view.components.NavigationPanel;
+import view.components.UIBase;
+import view.components.UserNavPanel;
 
 import javax.swing.*;
 import java.awt.*;

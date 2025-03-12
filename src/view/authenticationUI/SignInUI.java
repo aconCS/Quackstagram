@@ -2,10 +2,8 @@ package view.authenticationUI;
 
 import controller.AuthController;
 import controller.NavigationController;
-import model.User;
-import view.Components.UIBase;
+import view.components.UIBase;
 import view.coreUI.HomeUI;
-import view.coreUI.ProfileUI;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

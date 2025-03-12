@@ -2,7 +2,7 @@ package view.authenticationUI;
 
 import controller.AuthController;
 import controller.NavigationController;
-import view.Components.UIBase;
+import view.components.UIBase;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -60,6 +60,7 @@ public class SignUpUI extends UIBase {
                     "Password is too short",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
+            return;
         }
         authController.saveCredentials(username, password, bio);
         authController.uploadProfilePicture(username);

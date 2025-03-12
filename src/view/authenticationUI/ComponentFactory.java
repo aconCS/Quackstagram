@@ -1,7 +1,5 @@
 package view.authenticationUI;
 
-import view.Components.HeaderPanel;
-
 import javax.swing.*;
 import java.awt.*;
 

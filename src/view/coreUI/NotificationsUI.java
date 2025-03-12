@@ -2,9 +2,9 @@ package view.coreUI;
 
 import controller.UserController;
 import services.FileServices;
-import view.Components.HeaderPanel;
-import view.Components.NavigationPanel;
-import view.Components.UIBase;
+import view.components.HeaderPanel;
+import view.components.NavigationPanel;
+import view.components.UIBase;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,17 +14,30 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class NotificationsUI extends UIBase {
-    UserController userController;
 
+    private UserController userController;
 
+    /**
+     * Constructor for NotificationsUI.
+     *
+     * This constructor initializes the NotificationsUI components containing
+     * the header panel, navigation panel and the content panel containing the
+     * actual notifications.
+     * */
     public NotificationsUI() {
         setTitle("Notifications");
         this.userController = new UserController();
-        initializeUI();
+        buildUI();
     }
 
-    private void initializeUI() {
-        // Reuse the header and navigation panel creation methods from the InstagramProfileUI class
+    /*
+     * Builds the user interface for the Notifications screen.
+     *
+     * This method sets up the header panel, navigation panel, and content panel
+     * for displaying notifications. It reads notifications from a file and
+     * formats them for display.
+     */
+    private void buildUI() {
         JPanel headerPanel = new HeaderPanel("Notifications");
         JPanel navigationPanel = new NavigationPanel(this);
 
@@ -35,13 +48,12 @@ public class NotificationsUI extends UIBase {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-
         try (BufferedReader reader = Files.newBufferedReader(Paths.get("resources/data", "notifications.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(";");
                 if (parts[0].trim().equals(userController.getLoggedInUsername())) {
-                    // Format the notification message
+                    // Formats the notification message
                     String userWhoInteracted = parts[1].trim();
                     String imageId = parts[2].trim();
                     String timestamp = parts[3].trim();
@@ -60,11 +72,11 @@ public class NotificationsUI extends UIBase {
                             break;
                     }
 
-                    // Add the notification to the panel
+                    // Adds the notification to the panel
                     JPanel notificationPanel = new JPanel(new BorderLayout());
                     notificationPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
-                    // Add profile icon (if available) and timestamp
+                    // Adds profile icon (if available) and timestamp
                     ImageIcon profileIcon = new ImageIcon("resources/img/storage/profile/" + userWhoInteracted + ".png");
                     profileIcon.setImage(profileIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
                     JLabel scaledIcon = new JLabel(profileIcon);

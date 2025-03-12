@@ -1,39 +1,28 @@
 package view.coreUI;
 
-import controller.NavigationController;
 import controller.PostController;
 import services.FileServices;
-import view.Components.*;
+import view.components.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class PostUI extends UIBase {
 
-    private final int WIDTH = this.getWidth();
-    private final int IMAGE_DIMENSION = WIDTH/2;
+    private final int width = this.getWidth();
+    private final int imageDimension = width/2;
 
     private final PostController postController;
     private final CommentPanel commentPanel;
 
-    public PostUI (PostController postController) {
+    public PostUI(PostController postController) {
         this.postController = postController;
         commentPanel = new CommentPanel(postController);
 
-        buildPostUI();
+        buildUI();
     }
 
-    public void refresh() {
-        // Refresh the view
-        removeAll();
-        
-        revalidate();
-        repaint();
-    }
-
-    private void buildPostUI() {
+    private void buildUI() {
         add(new HeaderPanel(postController.getImageOwner() + "'s post"), BorderLayout.NORTH);
         add(createBodyPanel(), BorderLayout.CENTER);
         add(new NavigationPanel(this), BorderLayout.SOUTH);
@@ -53,12 +42,12 @@ public class PostUI extends UIBase {
         return bodyPanel;
     }
 
-    public JLabel createImageLabel(){
+    private JLabel createImageLabel(){
         // Crop the image to the fixed size
         JLabel imageLabel = new JLabel();
         imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        ImageIcon imageIcon = FileServices.createScaledIcon(postController.getImagePath(), IMAGE_DIMENSION, IMAGE_DIMENSION);
+        ImageIcon imageIcon = FileServices.createScaledIcon(postController.getImagePath(), imageDimension, imageDimension);
         if (imageIcon != null) {
             imageLabel.setIcon(imageIcon);
         } else {

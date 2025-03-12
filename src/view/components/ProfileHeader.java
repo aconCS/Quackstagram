@@ -1,4 +1,4 @@
-package view.Components;
+package view.components;
 
 import controller.NavigationController;
 import controller.UserController;

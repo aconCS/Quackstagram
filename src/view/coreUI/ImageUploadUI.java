@@ -1,15 +1,14 @@
 package view.coreUI;
 
 import controller.UserController;
-import view.Components.HeaderPanel;
-import view.Components.NavigationPanel;
-import view.Components.UIBase;
+import view.components.HeaderPanel;
+import view.components.NavigationPanel;
+import view.components.UIBase;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -19,23 +18,33 @@ import java.time.format.DateTimeFormatter;
 
 public class ImageUploadUI extends UIBase {
 
-    private final int WIDTH = this.getWidth();
-    private final int HEIGHT = this.getHeight();
+    private final int width = this.getWidth();
+    private final int height = this.getHeight();
 
-    private static final int NAV_ICON_SIZE = 20; // Size for navigation icons
     private JLabel imagePreviewLabel;
     private JTextArea captionTextArea;
     private JButton uploadButton;
     private JButton saveButton;
-    private boolean imageUploaded = false;
     private final UserController userController;
 
+    /**
+     * Constructor for ImageUploadUI.
+     * <p>
+     * This constructor initializes the ImageUploadUI components, including the header panel,
+     * navigation panel, image preview label, caption text area, upload button, and save button.
+     */
     public ImageUploadUI() {
         setTitle("Upload Image");
         userController = new UserController();
         initializeUI();
     }
 
+    /**
+     * Initializes the user interface components for the ImageUploadUI.
+     * <p>
+     * This method sets up the header panel, navigation panel, image preview label,
+     * caption text area, upload button, and save button.
+     */
     private void initializeUI() {
         JPanel headerPanel = new HeaderPanel("Upload Image");
 
@@ -48,21 +57,21 @@ public class ImageUploadUI extends UIBase {
         // Image preview
         imagePreviewLabel = new JLabel();
         imagePreviewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        imagePreviewLabel.setPreferredSize(new Dimension(WIDTH, HEIGHT / 3));
+        imagePreviewLabel.setPreferredSize(new Dimension(width, height / 3));
 
-        // Set an initial empty icon to the imagePreviewLabel
+        // Sets an initial empty icon to the imagePreviewLabel
         ImageIcon emptyImageIcon = new ImageIcon();
         imagePreviewLabel.setIcon(emptyImageIcon);
 
         contentPanel.add(imagePreviewLabel);
 
-        // Caption text area
+        // Caption-text area
         captionTextArea = new JTextArea("Enter a caption");
         captionTextArea.setAlignmentX(Component.CENTER_ALIGNMENT);
         captionTextArea.setLineWrap(true);
         captionTextArea.setWrapStyleWord(true);
         JScrollPane captionScrollPane = new JScrollPane(captionTextArea);
-        captionScrollPane.setPreferredSize(new Dimension(WIDTH - 50, HEIGHT / 6));
+        captionScrollPane.setPreferredSize(new Dimension(width - 50, height / 6));
         contentPanel.add(captionScrollPane);
 
         // Upload button
@@ -76,12 +85,20 @@ public class ImageUploadUI extends UIBase {
         saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         saveButton.addActionListener(this::saveCaptionAction);
 
-        // Add panels to frame
+        // Adds panels to frame
         add(headerPanel, BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
         add(navigationPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Handles the action of uploading an image.
+     * <p>
+     * This method opens a file chooser dialog to select an image file, saves the selected image
+     * to the specified directory, updates the image preview label, and changes the text of the upload button.
+     *
+     * @param event The action event triggered by the upload button.
+     */
     private void uploadAction(ActionEvent event) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Select an image file");
@@ -93,7 +110,7 @@ public class ImageUploadUI extends UIBase {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             try {
-                String username = userController.getLoggedInUsername(); // Read username from users.txt
+                String username = userController.getLoggedInUsername();
                 int imageId = getNextImageId(username);
                 String fileExtension = getFileExtension(selectedFile);
                 String newFileName = username + "_" + imageId + "." + fileExtension;
@@ -101,17 +118,17 @@ public class ImageUploadUI extends UIBase {
                 Path destPath = Paths.get("resources/img", "uploaded", newFileName);
                 Files.copy(selectedFile.toPath(), destPath, StandardCopyOption.REPLACE_EXISTING);
 
-                // Save the caption and image ID to a text file
+                // Saves the caption and image ID to a text file by calling saveImageInfo method
                 saveImageInfo(username + "_" + imageId, username, captionTextArea.getText());
 
-                // Load the image from the saved path
+                // Loads the image from the saved path
                 ImageIcon imageIcon = new ImageIcon(destPath.toString());
 
-                // Check if imagePreviewLabel has a valid size
+                // Checks if imagePreviewLabel has a valid size
                 if (imagePreviewLabel.getWidth() > 0 && imagePreviewLabel.getHeight() > 0) {
                     Image image = imageIcon.getImage();
 
-                    // Calculate the dimensions for the image preview
+                    // Calculates the dimensions for the image preview
                     int previewWidth = imagePreviewLabel.getWidth();
                     int previewHeight = imagePreviewLabel.getHeight();
                     int imageWidth = image.getWidth(null);
@@ -122,16 +139,14 @@ public class ImageUploadUI extends UIBase {
                     int scaledWidth = (int)(scale * imageWidth);
                     int scaledHeight = (int)(scale * imageHeight);
 
-                    // Set the image icon with the scaled image
+                    // Sets the image icon with the scaled image
                     imageIcon.setImage(image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH));
                 }
 
                 imagePreviewLabel.setIcon(imageIcon);
 
-                // Update the flag to indicate that an image has been uploaded
-                imageUploaded = true;
-
-                // Change the text of the upload button
+                // Changes the text of the upload button once an image
+                // has been uploaded
                 uploadButton.setText("Upload Another Image");
 
                 JOptionPane.showMessageDialog(this, "Image uploaded and preview updated!");
@@ -141,6 +156,18 @@ public class ImageUploadUI extends UIBase {
         }
     }
 
+    /**
+     * Retrieves the next available image ID for the given user.
+     * <p>
+     * This method scans the directory for existing images uploaded by the user and returns
+     * the next available ID.
+     *
+     * @param username The username of the user.
+     *
+     * @return The next available image ID.
+     *
+     * @throws IOException If an I/O error occurs.
+     */
     private int getNextImageId(String username) throws IOException {
         Path storageDir = Paths.get("resources/img", "uploaded"); // Ensure this is the directory where images are saved
         if (!Files.exists(storageDir)) {
@@ -168,6 +195,18 @@ public class ImageUploadUI extends UIBase {
         return maxId + 1; // Return the next available ID
     }
 
+    /**
+     * Saves the image information to a text file.
+     * <p>
+     * This method appends the image ID, username, caption, timestamp, and initial likes
+     * and comments to the image details file.
+     *
+     * @param imageId The ID of the image.
+     * @param username The username of the user.
+     * @param caption The caption for the image.
+     *
+     * @throws IOException If an I/O error occurs.
+     */
     private void saveImageInfo(String imageId, String username, String caption) throws IOException {
         Path infoFilePath = Paths.get("resources/img", "image_details.txt");
         if (!Files.exists(infoFilePath)) {
@@ -183,6 +222,15 @@ public class ImageUploadUI extends UIBase {
 
     }
 
+    /**
+     * Retrieves the file extension of the given file.
+     * <p>
+     * This method returns the file extension of the provided file.
+     *
+     * @param file The file whose extension is to be retrieved.
+     *
+     * @return The file extension.
+     */
     private String getFileExtension(File file) {
         String name = file.getName();
         int lastIndexOf = name.lastIndexOf(".");
@@ -192,10 +240,15 @@ public class ImageUploadUI extends UIBase {
         return name.substring(lastIndexOf + 1);
     }
 
+    /**
+     * Handles the action of saving the caption.
+     * <p>
+     * This method retrieves the caption text from the caption text area and displays a message dialog.
+     *
+     * @param event The action event triggered by the save button.
+     */
     private void saveCaptionAction(ActionEvent event) {
-        // Here you would handle saving the caption text
         String captionText = captionTextArea.getText();
-        // For example, save the caption text to a file or database
         JOptionPane.showMessageDialog(this, "Caption saved: " + captionText);
     }
 }

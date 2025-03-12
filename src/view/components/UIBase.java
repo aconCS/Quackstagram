@@ -1,11 +1,10 @@
-package view.Components;
+package view.components;
 
 import controller.NavigationController;
 import view.authenticationUI.SignInUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
