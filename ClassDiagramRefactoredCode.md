@@ -361,4 +361,68 @@ class UserNavPanel{
 
 %% SERVICE CLASSES
 
+AuthServices --> "1" User : creates
+
+class AuthServices{
+-String CREDENTIALS_FILE_PATH = "resources/data/credentials.txt"$
+-String PROFILE_PHOTO_STORAGE_PATH = "resources/img/storage/profile/"$
++verifyCredentials(String username, String password) boolean
++doesUsernameExist(String username) boolean
++saveCredentials(String username, String password, String bio)
++uploadProfilePicture(String username) boolean
+-saveProfilePicture(File file, String username)
+-saveLoggedInUser(User user)
+}
+
+class FileServices{
++openFileChooser(String dialogTitle, String... extensions) File$
++getElapsedTimestamp(String timestamp) String$
++createScaledIcon(String path, int width, int height) ImageIcon$
++getAllImageIds() ArrayList<String>
+}
+
+PostServices --> "1" UserController : creates
+PostServices --> "1" PostRepository : uses
+
+class PostServices{
+-PostRepository final postRepository
++PostServices()
++addCommentToPost(String imageId, String comment)
++getCommentsForPost(String imageId) ArrayList<String[]>
++addLikeToPost(String imageId)
++getLikesForPost(String imageId) int
++removeLikeFromPost(String imageId)
++isPostLiked(String imageId) boolean
++setNotification(String imageId, String type)
++getImageOwner(String imageId) String
++getImagePath(String imageId) String
++getPostCaption(String imageId) String
+}
+
+UserServices --> "1" User : uses
+UserServices --> "0..*" Post : uses
+UserServices --> "1" UserRepository : creates
+
+class UserServices{
+-UserRepository final userRepository
+-String final username
+-User final user
++UserServices(User user)
++initializeUserData()
++setBio(String bio)
++isFollowing(String currentUser, String loggedInUser) boolean
++unFollowUser(String follower, String followed)
++getPostPaths() List<Path>
++getAllUsers() ArrayList<String>
++changeBioData(String bio)
++followUser(String follower, String followed)
++getLoggedInUsername() String
++loadPostCount(String username) int
++loadFollowerCount(String username) int
++loadFollowingCount(String username) int
++loadBioData(String username) String
++loadUserPosts(String username) List<Post>
+}
+
+PostRepository --> "1" UserController : creates
 ```
