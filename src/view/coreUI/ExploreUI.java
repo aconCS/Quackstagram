@@ -5,8 +5,6 @@ import view.components.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ExploreUI extends UIBase {
 
@@ -46,14 +44,14 @@ public class ExploreUI extends UIBase {
         mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.Y_AXIS));
         imageGridPanel = new ImageGrid("", imageSize, false); // 3 columns, auto rows
 
-        JPanel searchPanel = createNavigationPanel();
+        JPanel searchPanel = createSearchPanel();
 
         mainContentPanel.add(searchPanel, BorderLayout.NORTH);
         mainContentPanel.add(imageGridPanel, BorderLayout.WEST); // This will stretch to take up remaining space
         return mainContentPanel;
     }
 
-    private JPanel createNavigationPanel() {
+    private JPanel createSearchPanel() {
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
 
