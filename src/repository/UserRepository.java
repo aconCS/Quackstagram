@@ -220,7 +220,7 @@ public class UserRepository {
 
                         String imgPath = "resources/img/uploaded/" + imageId + ".png";
 
-                        posts.add(new Post(imgPath, caption, likes, new ArrayList<>()));
+                        posts.add(new Post(imgPath));
                     }
                 }
             });

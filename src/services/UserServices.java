@@ -54,7 +54,7 @@ public class UserServices{
         List<Path> postPaths = new ArrayList<>();
 
         for(Post post : user.getPosts()){
-            postPaths.add(Paths.get(post.getImagePath()));
+            postPaths.add(Paths.get(post.imagePath()));
         }
 
         return postPaths;
