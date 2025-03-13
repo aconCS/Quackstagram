@@ -5,7 +5,6 @@ actor User
 
 participant LikeButton
 participant PostController
-participant FileServices
 
 User ->>+ LikeButton : clicks
 LikeButton ->>+ PostController : calls to activate like/unlike action
