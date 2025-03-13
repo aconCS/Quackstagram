@@ -425,4 +425,129 @@ class UserServices{
 }
 
 PostRepository --> "1" UserController : creates
+
+class PostRepository{
+-UserController final userController
++PostRepository()
++writeCommentToPost(String imageId, String comment)
++loadCommentsForPost(String imageId) ArrayList<String[]>
++writeLikeToPost(String imageId)
++loadLikesForPost(String imageId) int
++isAlreadyLiked(String imageId, String username) boolean
++deleteLikeFromPost(String imageId)
++writeNotification(String imageId, String type)
++readPostCaption(String imageId) String
+}
+
+UserRepository --> "0..*" Post : creates
+
+class UserRepository{
+-String final followersFilePath = "resources/data/following.txt"
+-Path final imageDetailsFilePath = Paths.get("resources/img", "image_details.txt")
+-Path final usersFilePath = Paths.get("resources/data", "users.txt")
++UserRepository()
++readPostCount(String username) int
++readLoggedInUsername() String
++writeFollowData(String follower, String followed)
++removeFollowData(String follower, String followed)
++isAlreadyFollowing(String follower, String followed) boolean
++readFollowersData(String username) List<String>
++readFollowingData(String username) List<String>
++readBioData(String username) String
++changeBioData(String newBio)
++readUserPosts(String currUsername) List<Post>
++loadAllUsers() ArrayList<String>
+}
+
+%% MODEL CLASSES
+
+User ..> "0..*" Post
+
+class User{
+-String username
+-String bio
+-String password
+-int postsCount
+-int followersCount
+-int followingCount
+-List<Post> posts
++User(String username, String bio, String password)
++User(String username)
++getUsername() String
++getBio() String
++getPostsCount() int
++getFollowersCount() int
++getFollowingCount() int
++getPosts() List<Post>
++setBio(String bio)
++setFollowersCount(int followersCount)
++setFollowingCount(int followingCount)
++setPostCount(int postCount)
++setPosts(List<Post> posts)
++toString() String
+}
+
+%% Record class
+class Post{
+-String final imagePath
++Post(String imagePath)
++getImagePath() String
+}
+
+%% CONTROLLER CLASSES
+
+AuthController --> "1" AuthServices : creates
+
+class AuthController{
+-AuthServices final authServices
++AuthController()
++verifyCredentials(String username, String password) boolean
++doesUsernameExist(String username) boolean
++saveCredentials(String username, String password, String bio)
++uploadProfilePicture(String username) boolean
+}
+
+class NavigationController{
+-NavigationController instance$
+-NavigationController()
++NavigationController getInstance()$
++navigate(JFrame currentFrame, JFrame nextFrame)
+}
+
+PostController --> "1" PostServices : creates
+
+class PostController{
+-PostServices final postServices
+-String final imageId
++PostController(String imageId)
++addCommentToPost(String comment)
++getCommentsForPost() ArrayList<String[]>
++getLikesForPost() int
++likeAction()
++getImageOwner() String
++isPostLiked() boolean
++getImagePath() String
++getPostCaption() String
+}
+
+UserController --> "1" User : creates
+UserController --> "1" UserServices : creates
+
+class UserController{
+-UserServices final userService
+-User final user
++UserController(String username)
++UserController()
++getBio() String
++getPostCount() int
++getFollowerCount() int
++getFollowingCount() int
++isFollowing(String currentUser, String loggedInUser) boolean
++unfollowUser(String follower, String followed)
++followUser(String follower, String followed)
++changeProfilePicture()
++editBio(String bio)
++getAllUsers() ArrayList<String>
++getLoggedInUsername() String
+}
 ```
