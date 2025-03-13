@@ -159,15 +159,6 @@ public class UserRepository {
         return bio;
     }
 
-    public void deleteOldProfilePicture() throws IOException {
-        String profilePicPaths = "resources/img/storage/profile/";
-        File oldPicture = new File(profilePicPaths + readLoggedInUsername() + ".png");
-        if (!oldPicture.delete()) {
-            System.out.println("Could not delete file");
-        }
-
-    }
-
     public void changeBioData(String newBio) throws IOException {
         String detailsPath = "resources/data/credentials.txt";
 

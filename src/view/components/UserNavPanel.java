@@ -1,7 +1,6 @@
 package view.components;
 
 import controller.NavigationController;
-import controller.PostController;
 import view.coreUI.ProfileUI;
 
 import javax.swing.*;
@@ -17,10 +16,10 @@ public class UserNavPanel extends JPanel {
         this.imageOwner = imageOwner;
         setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        initializeUI();
+        buildUI();
     }
 
-    private void initializeUI() {
+    private void buildUI() {
         ImageIcon profileIcon = new ImageIcon("resources/img/storage/profile/" + imageOwner + ".png");
         profileIcon.setImage(profileIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         JLabel scaledIcon = new JLabel(profileIcon);

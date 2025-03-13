@@ -25,7 +25,7 @@ public class CommentButton extends JPanel {
         buildCommentButton();
     }
 
-    public void refresh(){
+    private void refresh(){
         // Refresh the view
         removeAll();
         buildCommentButton();
@@ -73,6 +73,15 @@ public class CommentButton extends JPanel {
         commentDialog.add(commentField, BorderLayout.CENTER);
 
         // Submit button
+        JButton submitButton = getSubmitButton(commentField, commentDialog);
+        commentDialog.add(submitButton, BorderLayout.SOUTH);
+
+        // Show the dialog
+        commentDialog.setLocationRelativeTo(null);
+        commentDialog.setVisible(true);
+    }
+
+    private JButton getSubmitButton(JTextField commentField, JDialog commentDialog) {
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(new ActionListener() {
             @Override
@@ -87,10 +96,6 @@ public class CommentButton extends JPanel {
                 }
             }
         });
-        commentDialog.add(submitButton, BorderLayout.SOUTH);
-
-        // Show the dialog
-        commentDialog.setLocationRelativeTo(null);
-        commentDialog.setVisible(true);
+        return submitButton;
     }
 }

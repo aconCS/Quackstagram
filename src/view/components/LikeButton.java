@@ -7,8 +7,8 @@ import java.awt.*;
 
 public class LikeButton extends JPanel{
 
-    private static final Color  UNLIKED_BUTTON_COLOR = new Color(255, 153, 153, 255); // Color for the like button
-    private static final Color  LIKED_BUTTON_COLOR =  new Color(255, 90, 95); // Color for the like button
+    private static final Color  UNLIKED_BUTTON_COLOR = new Color(255, 153, 153, 255);
+    private static final Color  LIKED_BUTTON_COLOR =  new Color(255, 90, 95);
     private final PostController postController;
 
     public LikeButton(PostController postController){

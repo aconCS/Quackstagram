@@ -9,8 +9,8 @@ import java.awt.*;
 
 public class NavigationPanel extends JPanel {
 
-    private final UserController userController;
     private static final int NAV_ICON_SIZE = 20; // Size for navigation icons
+    private final UserController userController;
     private final JFrame currFrame;
 
     // TODO CHANGE
@@ -24,7 +24,7 @@ public class NavigationPanel extends JPanel {
      * Builds the navigation bar that every UI frame will have at the bottom
      * of the window by calling createIconButton for each icon.
      * */
-    public void buildNavigationPanel() {
+    private void buildNavigationPanel() {
         setBackground(new Color(249, 249, 249));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));

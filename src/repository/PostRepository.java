@@ -143,7 +143,7 @@ public class PostRepository {
         }
     }
 
-    public void writeNotification(String imageId, String type){
+    public void writeNotification(String imageId, String type) {
         // Record the action in notifications.txt
         String currentUser = userController.getLoggedInUsername();
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -157,7 +157,7 @@ public class PostRepository {
         }
     }
 
-    public String readPostCaption(String imageId){
+    public String readPostCaption(String imageId) {
         String caption = "";
         try (BufferedReader reader = Files.newBufferedReader(Paths.get("resources/img", "image_details.txt"))) {
             String line;

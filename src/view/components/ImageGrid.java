@@ -17,10 +17,6 @@ public class ImageGrid extends JPanel{
     private String filter;
     private final boolean isExact;
 
-    public void setFilter(String filter){
-        this.filter = filter;
-    }
-
     public ImageGrid(String filter, int imageSize, boolean isExact) {
         setLayout(new BorderLayout(5,5));
         this.imageSize = imageSize;
@@ -28,6 +24,10 @@ public class ImageGrid extends JPanel{
         this.filter = filter;
 
         initializeScrollGrid();
+    }
+
+    public void setFilter(String filter){
+        this.filter = filter;
     }
 
     public void refresh(){

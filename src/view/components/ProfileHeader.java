@@ -8,9 +8,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ProfileHeader extends JPanel {
+    private static final int PROFILE_IMAGE_SIZE = 80;
     private final String username;
     private final UserController userController;
-    private static final int PROFILE_IMAGE_SIZE = 80; // Adjusted size for the profile image to match UI
     private JPanel statsPanel;
 
     public ProfileHeader(String username, UserController userController) {
@@ -111,7 +111,7 @@ public class ProfileHeader extends JPanel {
             profileButton.setText(buttonText);
             profileButton.addActionListener(e -> {
                 if(userController.isFollowing(loggedInUsername, username)){
-                    userController.unFollowUser(loggedInUsername, username);
+                    userController.unfollowUser(loggedInUsername, username);
                     profileButton.setText("Follow");
                     refresh();
                 } else {

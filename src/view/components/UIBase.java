@@ -9,8 +9,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class UIBase extends JFrame {
-    private static final int HEIGHT = 600;
     private static final int WIDTH = 400;
+    private static final int HEIGHT = 600;
 
     // Sets the size of the frame and centers it on the screen
     public UIBase() {

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class FileServices {
 
-    public File openFileChooser(String dialogTitle, String... extensions) {
+    public static File openFileChooser(String dialogTitle, String... extensions) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle(dialogTitle);
         fileChooser.setAcceptAllFileFilterUsed(false);
@@ -63,7 +63,6 @@ public class FileServices {
 
         return timeElapsed.toString();
     }
-
 
     public static ImageIcon createScaledIcon(String path, int width, int height) {
         ImageIcon imageIcon;
